@@ -67,12 +67,29 @@ func (server *MainServer) AddCity(writer http.ResponseWriter, request *http.Requ
 		writer.WriteHeader(http.StatusBadRequest)
 		return
 	}
+	writer.Header().Set(contentType, value)
+	err = json.NewEncoder(writer).Encode(err)
+	if err != nil {
+		writer.WriteHeader(http.StatusNotFound)
+		return
+	}
 	return
 }
 
 func (server *MainServer) GetAllCities(writer http.ResponseWriter, request *http.Request, params httprouter.Params) {
-	
+	cities, err := server.maintenanceService.GetAllCities()
+	if err != nil {
+		writer.WriteHeader(http.StatusBadRequest)
+	}
+	writer.Header().Set(contentType, value)
+	err = json.NewEncoder(writer).Encode(cities)
+	if err != nil {
+		writer.WriteHeader(http.StatusNotFound)
+		return
+	}
+	return
 }
+
 func (server *MainServer) AddBranchHandler(writer http.ResponseWriter, request *http.Request, _ httprouter.Params) {
 	var requestBody models.Branch
 	err := json.NewDecoder(request.Body).Decode(&requestBody)
@@ -86,9 +103,99 @@ func (server *MainServer) AddBranchHandler(writer http.ResponseWriter, request *
 		writer.WriteHeader(http.StatusBadRequest)
 		return
 	}
+	writer.Header().Set(contentType, value)
+	err = json.NewEncoder(writer).Encode(err)
+	if err != nil {
+		writer.WriteHeader(http.StatusNotFound)
+		return
+	}
 	return
 }
 
-func (server *MainServer) GetBranchByCity(writer http.ResponseWriter, request *http.Request, params httprouter.Params) {
+func (server *MainServer) GetBranchByCityHandler(writer http.ResponseWriter, request *http.Request, params httprouter.Params) {
+	cityID, _ := strconv.Atoi(params.ByName("city_id"))
+	branches, err := server.maintenanceService.GetBranchByCity(cityID)
+	if err != nil {
+		writer.WriteHeader(http.StatusBadRequest)
+	}
+	writer.Header().Set(contentType, value)
+	err = json.NewEncoder(writer).Encode(branches)
+	if err != nil {
+		writer.WriteHeader(http.StatusNotFound)
+		return
+	}
+	return
+}
 
+func (server *MainServer) AddPurposeHandler(writer http.ResponseWriter, request *http.Request, _ httprouter.Params) {
+	var requestBody models.Purpose
+	err := json.NewDecoder(request.Body).Decode(&requestBody)
+	if err != nil {
+		writer.WriteHeader(http.StatusBadRequest)
+		return
+	}
+
+	err = server.maintenanceService.AddPurpose(requestBody)
+	if err != nil {
+		writer.WriteHeader(http.StatusBadRequest)
+		return
+	}
+	writer.Header().Set(contentType, value)
+	err = json.NewEncoder(writer).Encode(err)
+	if err != nil {
+		writer.WriteHeader(http.StatusNotFound)
+		return
+	}
+	return
+}
+
+func (server *MainServer) GetPurposes(writer http.ResponseWriter, request *http.Request, _ httprouter.Params) {
+	purposes, err := server.maintenanceService.GetPurposes()
+	if err != nil {
+		writer.WriteHeader(http.StatusBadRequest)
+	}
+	writer.Header().Set(contentType, value)
+	err = json.NewEncoder(writer).Encode(purposes)
+	if err != nil {
+		writer.WriteHeader(http.StatusNotFound)
+		return
+	}
+	return
+}
+
+
+func (server *MainServer) AddTimesHandler(writer http.ResponseWriter, request *http.Request, _ httprouter.Params) {
+	var requestBody models.Time
+	err := json.NewDecoder(request.Body).Decode(&requestBody)
+	if err != nil {
+		writer.WriteHeader(http.StatusBadRequest)
+		return
+	}
+
+	err = server.maintenanceService.AddTime(requestBody)
+	if err != nil {
+		writer.WriteHeader(http.StatusBadRequest)
+		return
+	}
+	writer.Header().Set(contentType, value)
+	err = json.NewEncoder(writer).Encode(err)
+	if err != nil {
+		writer.WriteHeader(http.StatusNotFound)
+		return
+	}
+	return
+}
+
+func (server *MainServer) GetTimes(writer http.ResponseWriter, request *http.Request, _ httprouter.Params) {
+	times, err := server.maintenanceService.GetTimes()
+	if err != nil {
+		writer.WriteHeader(http.StatusBadRequest)
+	}
+	writer.Header().Set(contentType, value)
+	err = json.NewEncoder(writer).Encode(times)
+	if err != nil {
+		writer.WriteHeader(http.StatusNotFound)
+		return
+	}
+	return
 }

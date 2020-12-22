@@ -11,4 +11,8 @@ const GetAllRoles  =  `select * from roles`
 const AddCity  =  `insert into cities(name) values($1)`
 const GetAllCities  =  `select * from cities`
 const AddBranch  =  `insert into branches(address, city_id) values($1, $2)`
-const GetAllBranches  =  `select * from branches`
+const GetBranchByCity  =  `select * from branches where city_id = ($1)`
+const AddPurpose  =  `insert into purposes(name) values($1)`
+const GetPurposes  =  `select * from purposes`
+const AddTime  =  `insert into times(name) values($1)`
+const GetTimes  =  `select * from times`
