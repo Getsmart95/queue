@@ -11,12 +11,13 @@ import (
 type MainServer struct {
 	pool *pgxpool.Pool
 	router *httprouter.Router
-	userService *services.UserService
 	Initilize *postgres.DBPostgres
+	userService *services.UserService
+	maintenanceService *services.MaintenanceService
 }
 
-func NewMainServer(pool *pgxpool.Pool, router *httprouter.Router, userService *services.UserService, initilize *postgres.DBPostgres) *MainServer {
-	return &MainServer{pool: pool, router: router, userService: userService, Initilize: initilize}
+func NewMainServer(pool *pgxpool.Pool, router *httprouter.Router, initilize *postgres.DBPostgres, userService *services.UserService, maintenanceService *services.MaintenanceService) *MainServer {
+	return &MainServer{pool: pool, router: router, Initilize: initilize, userService: userService, maintenanceService: maintenanceService}
 }
 
 func (server *MainServer) ServeHTTP(w http.ResponseWriter, r *http.Request){

@@ -4,7 +4,7 @@ import (
 	"reflect"
 )
 
-func (server *MainServer) InitRouts() {
+func (server *MainServer) InitRoutes() {
 	//handler := jwt.JWT(reflect.TypeOf((*token.Payload)(nil)).Elem(), server.secret)(server.RemoveUserByLoginHandler)
 
 	server.router.GET("/api/getAllRoles", server.GetRolesHandler)

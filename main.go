@@ -29,10 +29,11 @@ func main() {
 	}
 
 	userService := services.NewUserService(pool)
+	maintenanceService := services.NewMaintenanceService(pool)
 	dbInit := postgres.NewDBInit(pool)
 	//tokenSvc := token.NewTokenSvc(svc, []byte(`surush`))
 	//secret := jwt.Secret(`surush`)
-	server := app.NewMainServer(pool, router, userService, dbInit)
+	server := app.NewMainServer(pool, router,  dbInit, userService, maintenanceService)
 	server.Start()
 
 	panic(http.ListenAndServe(address, server))

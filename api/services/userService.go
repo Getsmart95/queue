@@ -3,7 +3,6 @@ package services
 import (
 	"context"
 	"errors"
-	"fmt"
 	"github.com/jackc/pgx/pgxpool"
 	"log"
 	"queue/databases/postgres"
@@ -25,6 +24,7 @@ func (receiver *UserService) GetAllRoles() (Roles []models.Role, err error) {
 	conn, err := receiver.pool.Acquire(context.Background())
 	if err != nil {
 		log.Fatal("can't get connection")
+		return
 	}
 
 	defer conn.Release()
