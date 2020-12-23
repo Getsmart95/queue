@@ -1,6 +1,6 @@
 package postgres
 
-const CreateUsersTable  =	`Create table if not exists users (
+const CreateUsersTable  =  `Create table if not exists users (
 	id bigserial primary key,
 	name varchar(60) not null,
 	surname varchar(60) not null,
@@ -25,14 +25,14 @@ const CreateBranchesTable  =  `Create table if not exists branches (
 
 const CreateRolesTable  =  `Create table if not exists roles (
 	id bigserial primary key,
-	name varchar(60) not null,
+	name varchar(60) not null unique,
 	display_name varchar(60) not null,
 	description varchar(191) not null
-`
+)`
 
 const CreateUserRoleTable  =  `Create table if not exists userRole (
-	role_id references roles,
-	user_id references users
+	role_id integer references roles,
+	user_id integer references users
 );`
 
 const CreatePurposesTable  =  `Create table if not exists purposes (
@@ -47,12 +47,12 @@ const CreateTimesTable  =  `Create table if not exists times (
 
 const CreateQueuesTable  =  `Create table if not exists queues (
 	id bigserial primary key,
-	user_id references users,
-	purpose_id references purposes,
-	time_id references times,
-	city_id references cities,
-	branch_id references branches,
-	status string not null,
+	user_id integer references users,
+	purpose_id integer references purposes,
+	time_id integer references times,
+	city_id integer references cities,
+	branch_id integer references branches,
+	status varchar(60) not null,
 	date time,
 	start_at time,
 	finish_at time,

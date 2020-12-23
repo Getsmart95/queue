@@ -9,7 +9,7 @@ type User struct {
 		Login     string
 		Password  string
 		Email     string
-		Phone     int
+		Phone     string
 		Status    bool
 		CreatedAt time.Time
 	}

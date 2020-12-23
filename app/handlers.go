@@ -2,6 +2,7 @@ package app
 
 import (
 	"encoding/json"
+	"fmt"
 	"queue/models"
 	"github.com/julienschmidt/httprouter"
 	"net/http"
@@ -9,6 +10,65 @@ import (
 )
 const contentType = "Content-Type"
 const value = "application/json; charset=utf-8"
+
+func (server *MainServer) RegisterHandler(writer http.ResponseWriter, request *http.Request, params httprouter.Params) {
+	var requestBody models.User
+	err := json.NewDecoder(request.Body).Decode(&requestBody)
+	if err != nil {
+		writer.WriteHeader(http.StatusBadRequest)
+		return
+	}
+
+	err = server.userService.Registration(requestBody)
+	if err != nil {
+		writer.WriteHeader(http.StatusNotFound)
+		return
+	}
+	userID, err := server.userService.GetUserByLogin(requestBody.Login)
+	//	Add role "user"
+	roleID := 3
+	err = server.userService.AddUserRole(userID, roleID)
+	if err != nil {
+		writer.WriteHeader(http.StatusBadRequest)
+	}
+
+	writer.Header().Set(contentType, value)
+	err = json.NewEncoder(writer).Encode(err)
+	if err != nil {
+		writer.WriteHeader(http.StatusNotFound)
+		return
+	}
+	return
+}
+
+func (server *MainServer) LoginHandler(writer http.ResponseWriter, request *http.Request, params httprouter.Params) {
+	var requestBody models.User
+	err := json.NewDecoder(request.Body).Decode(&requestBody)
+	fmt.Println(requestBody)
+	if err != nil {
+		writer.WriteHeader(http.StatusBadRequest)
+		return
+	}
+	//json.NewEncoder(writer).Encode(err)
+	Login, Password, err := server.userService.Authentication(requestBody)
+	fmt.Println(Login, Password,err)
+	if err != nil && Login == false {
+		writer.WriteHeader(http.StatusBadRequest)
+		json.NewEncoder(writer).Encode(Login)
+	}
+
+	if Password == false {
+		writer.WriteHeader(http.StatusBadRequest)
+		json.NewEncoder(writer).Encode(Password)
+	}
+	writer.Header().Set(contentType, value)
+	err = json.NewEncoder(writer).Encode(err)
+	if err != nil {
+		writer.WriteHeader(http.StatusNotFound)
+		return
+	}
+	return
+}
 
 func (server *MainServer) GetRolesHandler(writer http.ResponseWriter, request *http.Request, _ httprouter.Params) {
 	roles, err := server.userService.GetAllRoles()

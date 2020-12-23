@@ -2,8 +2,8 @@ package postgres
 
 import (
 	"context"
+	"fmt"
 	"github.com/jackc/pgx/pgxpool"
-	"log"
 )
 
 type DBPostgres struct {
@@ -15,10 +15,10 @@ func NewDBInit(pool *pgxpool.Pool) *DBPostgres {
 }
 
 func (receiver *DBPostgres) DbInit() (err error) {
-	var DDLs = []string {
+	var DDLs = []string{
 		CreateUsersTable,
-		CreateBranchesTable,
 		CreateCitiesTable,
+		CreateBranchesTable,
 		CreatePurposesTable,
 		CreateTimesTable,
 		CreateRolesTable,
@@ -30,7 +30,7 @@ func (receiver *DBPostgres) DbInit() (err error) {
 	for _, ddl :=range DDLs {
 		_, err := receiver.pool.Exec(context.Background(), ddl)
 		if err != nil {
-			log.Fatal("err: #{err}\n")
+			fmt.Println("errs: #{err}\n")
 			return err
 		}
 	}

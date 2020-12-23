@@ -3,6 +3,7 @@ package main
 import (
 	"context"
 	"flag"
+	"fmt"
 	"github.com/jackc/pgx/pgxpool"
 	"github.com/julienschmidt/httprouter"
 	"log"
@@ -35,7 +36,8 @@ func main() {
 	//secret := jwt.Secret(`surush`)
 	server := app.NewMainServer(pool, router,  dbInit, userService, maintenanceService)
 	server.Start()
-
+	fmt.Println(address)
 	panic(http.ListenAndServe(address, server))
+
 
 }
