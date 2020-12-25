@@ -4,7 +4,6 @@ import "C"
 import (
 	"context"
 	"github.com/jackc/pgx/pgxpool"
-	"log"
 	"queue/databases/postgres"
 	"queue/models"
 )
@@ -20,7 +19,6 @@ func NewMaintenanceService(pool *pgxpool.Pool) *MaintenanceService {
 func (receiver *MaintenanceService) AddCity(City models.City) (err error) {
 	conn, err := receiver.pool.Acquire(context.Background())
 	if err != nil {
-		log.Fatal("Cant connect")
 		return
 	}
 
@@ -28,7 +26,7 @@ func (receiver *MaintenanceService) AddCity(City models.City) (err error) {
 
 	_, err = conn.Exec(context.Background(), postgres.AddCity, City.Name)
 	if err != nil {
-		log.Fatal("cant add city")
+		return
 	}
 	return nil
 }
@@ -36,14 +34,12 @@ func (receiver *MaintenanceService) AddCity(City models.City) (err error) {
 func (receiver *MaintenanceService) GetAllCities()(Cities []models.City, err error){
 	conn, err := receiver.pool.Acquire(context.Background())
 	if err != nil {
-		log.Fatal("can't get connection")
 		return
 	}
 
 	defer conn.Release()
 	rows, err := conn.Query(context.Background(), postgres.GetAllCities)
 	if err != nil {
-		log.Fatal("no have cities")
 		return
 	}
 
@@ -52,7 +48,6 @@ func (receiver *MaintenanceService) GetAllCities()(Cities []models.City, err err
 		City := models.City{}
 		errRole := rows.Scan(&City.ID, &City.Name)
 		if errRole != nil {
-			log.Fatal("canr read #{errRole}")
 			return
 		}
 		Cities = append(Cities, City)
@@ -63,7 +58,6 @@ func (receiver *MaintenanceService) GetAllCities()(Cities []models.City, err err
 func (receiver *MaintenanceService) AddBranch(Branch models.Branch) (err error) {
 	conn, err := receiver.pool.Acquire(context.Background())
 	if err != nil {
-		log.Fatal("Cant connect")
 		return
 	}
 
@@ -71,7 +65,7 @@ func (receiver *MaintenanceService) AddBranch(Branch models.Branch) (err error) 
 
 	_, err = conn.Exec(context.Background(), postgres.AddBranch, Branch.Address, Branch.CityID)
 	if err != nil {
-		log.Fatal("cant add branch")
+		return
 	}
 	return nil
 }
@@ -79,14 +73,12 @@ func (receiver *MaintenanceService) AddBranch(Branch models.Branch) (err error) 
 func (receiver *MaintenanceService) GetBranchByCity(CityID int)(Branches []models.Branch, err error){
 	conn, err := receiver.pool.Acquire(context.Background())
 	if err != nil {
-		log.Fatal("can't get connection")
 		return
 	}
 
 	defer conn.Release()
 	rows, err := conn.Query(context.Background(), postgres.GetBranchByCity, CityID)
 	if err != nil {
-		log.Fatal("no have branches")
 		return
 	}
 
@@ -95,7 +87,6 @@ func (receiver *MaintenanceService) GetBranchByCity(CityID int)(Branches []model
 		Branch := models.Branch{}
 		errRole := rows.Scan(&Branch.ID, &Branch.Address, &Branch.CityID)
 		if errRole != nil {
-			log.Fatal("canr read #{errRole}")
 			return
 		}
 		Branches = append(Branches, Branch)
@@ -106,7 +97,6 @@ func (receiver *MaintenanceService) GetBranchByCity(CityID int)(Branches []model
 func (receiver *MaintenanceService) AddPurpose(Purpose models.Purpose) (err error) {
 	conn, err := receiver.pool.Acquire(context.Background())
 	if err != nil {
-		log.Fatal("Cant connect")
 		return
 	}
 
@@ -114,7 +104,7 @@ func (receiver *MaintenanceService) AddPurpose(Purpose models.Purpose) (err erro
 
 	_, err = conn.Exec(context.Background(), postgres.AddPurpose, Purpose.Name)
 	if err != nil {
-		log.Fatal("cant add purpose")
+		return
 	}
 	return nil
 }
@@ -122,14 +112,12 @@ func (receiver *MaintenanceService) AddPurpose(Purpose models.Purpose) (err erro
 func (receiver *MaintenanceService) GetPurposes()(Purposes []models.Purpose, err error){
 	conn, err := receiver.pool.Acquire(context.Background())
 	if err != nil {
-		log.Fatal("can't get connection")
 		return
 	}
 
 	defer conn.Release()
 	rows, err := conn.Query(context.Background(), postgres.GetPurposes)
 	if err != nil {
-		log.Fatal("no have purposes")
 		return
 	}
 
@@ -138,7 +126,6 @@ func (receiver *MaintenanceService) GetPurposes()(Purposes []models.Purpose, err
 		Purpose := models.Purpose{}
 		errRole := rows.Scan(&Purpose.ID, &Purpose.Name)
 		if errRole != nil {
-			log.Fatal("canr read #{errRole}")
 			return
 		}
 		Purposes = append(Purposes, Purpose)
@@ -149,7 +136,6 @@ func (receiver *MaintenanceService) GetPurposes()(Purposes []models.Purpose, err
 func (receiver *MaintenanceService) AddTime(Time models.Time) (err error) {
 	conn, err := receiver.pool.Acquire(context.Background())
 	if err != nil {
-		log.Fatal("Cant connect")
 		return
 	}
 
@@ -157,7 +143,7 @@ func (receiver *MaintenanceService) AddTime(Time models.Time) (err error) {
 
 	_, err = conn.Exec(context.Background(), postgres.AddTime, Time.Name)
 	if err != nil {
-		log.Fatal("cant add purpose")
+		return
 	}
 	return nil
 }
@@ -165,14 +151,12 @@ func (receiver *MaintenanceService) AddTime(Time models.Time) (err error) {
 func (receiver *MaintenanceService) GetTimes()(Times []models.Time, err error){
 	conn, err := receiver.pool.Acquire(context.Background())
 	if err != nil {
-		log.Fatal("can't get connection")
 		return
 	}
 
 	defer conn.Release()
 	rows, err := conn.Query(context.Background(), postgres.GetTimes)
 	if err != nil {
-		log.Fatal("no have times")
 		return
 	}
 
@@ -181,7 +165,6 @@ func (receiver *MaintenanceService) GetTimes()(Times []models.Time, err error){
 		Time := models.Time{}
 		errRole := rows.Scan(&Time.ID, &Time.Name)
 		if errRole != nil {
-			log.Fatal("canr read #{errRole}")
 			return
 		}
 		Times = append(Times, Time)

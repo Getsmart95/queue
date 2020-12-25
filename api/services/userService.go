@@ -33,22 +33,23 @@ func (receiver *UserService) Registration(User models.User) (err error) {
 
 	_, err = conn.Exec(context.Background(), postgres.AddUser, User.Name, User.Surname, User.Login, User.Password, User.Email, User.Phone, User.Status)
 	if err != nil {
-		log.Fatal("Cant add user")
+		//log.Fatal("Cant add user")
+		fmt.Println(err)
 		return
 	}
+
 	return nil
 }
 
-func (receiver *UserService) Authentication(User models.User) (Login bool, Password bool, err error) {
+func (receiver *UserService) Authentication(User models.User) (Login bool, Password bool, user models.User, err error) {
 	conn, err := receiver.pool.Acquire(context.Background())
 	if err != nil {
 		log.Fatal("can't get connection")
 	}
-	user := models.User{}
 	defer conn.Release()
 
 	err = conn.QueryRow(context.Background(), postgres.GetUserByLogin, User.Login).Scan(
-		&user.ID,
+		//&user.ID,
 		&user.Name,
 		&user.Surname,
 		&user.Login,
@@ -59,12 +60,13 @@ func (receiver *UserService) Authentication(User models.User) (Login bool, Passw
 		&user.CreatedAt)
 
 	if err != nil {
-		return false, false, err
+		return false, false, user, err
 	}
 	if MakeHash(User.Password) != user.Password {
-		return true, false, err
+		return true, false, user, err
 	}
-	return true, true, nil
+
+	return true, true, user, nil
 }
 
 func MakeHash(password string) string {
@@ -127,16 +129,24 @@ func (receiver *UserService) AddUserRole(userID int, roleID int) (err error) {
 	return nil
 }
 
-func (receiver *UserService) GetUserByLogin(userLogin string) (userID int, err error) {
+func (receiver *UserService) GetUserByLogin(userLogin string) (user models.User, err error) {
 	conn, err := receiver.pool.Acquire(context.Background())
 	if err != nil {
 		log.Fatal("can't get connection")
 	}
 	defer conn.Release()
-	var UserID int
-	err = conn.QueryRow(context.Background(), postgres.GetUserByLogin, userLogin).Scan(&UserID)
+	err = conn.QueryRow(context.Background(), postgres.GetUserByLogin, userLogin).Scan(
+		&user.ID,
+		&user.Name,
+		&user.Surname,
+		&user.Login,
+		&user.Password,
+		&user.Email,
+		&user.Phone,
+		&user.Status,
+		&user.CreatedAt)
 	if err != nil {
 		log.Fatal("Cant add user")
 	}
-	return UserID, nil
+	return user, nil
 }

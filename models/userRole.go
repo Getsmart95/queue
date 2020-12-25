@@ -1,6 +1,6 @@
 package models
 
 type UserRole struct {
-	RoleID int
-	UserID int
+	RoleID int	`json:"role_id"`
+	UserID int	`json:"user_id"`
 }

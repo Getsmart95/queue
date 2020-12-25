@@ -16,6 +16,7 @@ func NewDBInit(pool *pgxpool.Pool) *DBPostgres {
 
 func (receiver *DBPostgres) DbInit() (err error) {
 	var DDLs = []string{
+		SetTimeZone,
 		CreateUsersTable,
 		CreateCitiesTable,
 		CreateBranchesTable,
@@ -25,7 +26,11 @@ func (receiver *DBPostgres) DbInit() (err error) {
 		CreateUserRoleTable,
 		CreateQueuesTable,
 		RolesSeeder,
-		AddAdmin}
+		UserSeeder,
+		CitiesSeeder,
+		BranchesSeeder,
+		TimesSeeder,
+		PurposesSeeder}
 
 	for _, ddl :=range DDLs {
 		_, err := receiver.pool.Exec(context.Background(), ddl)

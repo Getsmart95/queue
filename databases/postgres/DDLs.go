@@ -9,17 +9,17 @@ const CreateUsersTable  =  `Create table if not exists users (
 	email varchar(60) unique,
 	phone varchar(60) unique,
 	status boolean not null,
-	created_at time default CURRENT_TIMESTAMP
+	created_at timestamp default CURRENT_TIMESTAMP
 );`
 
 const CreateCitiesTable  =  `Create table if not exists cities (
 	id bigserial primary key,
-	name varchar(60)
+	name varchar(60) not null unique
 );`
 
 const CreateBranchesTable  =  `Create table if not exists branches (
 	id bigserial primary key,
-	address varchar(60) not null,
+	address varchar(60) not null unique,
 	city_id integer references cities
 );`
 
@@ -37,24 +37,25 @@ const CreateUserRoleTable  =  `Create table if not exists userRole (
 
 const CreatePurposesTable  =  `Create table if not exists purposes (
 	id bigserial primary key,
-	name varchar(90) not null
+	name varchar(90) not null unique
 );`
 
 const CreateTimesTable  =  `Create table if not exists times (
 	id bigserial primary key,
-	name varchar(30) not null
+	name varchar(30) not null unique
 );`
 
 const CreateQueuesTable  =  `Create table if not exists queues (
 	id bigserial primary key,
+	queue_code varchar(30) not null,
 	user_id integer references users,
 	purpose_id integer references purposes,
 	time_id integer references times,
 	city_id integer references cities,
 	branch_id integer references branches,
 	status varchar(60) not null,
-	date time,
-	start_at time,
-	finish_at time,
-	created_at time default CURRENT_TIMESTAMP
+	date date default current_date,
+	start_at timestamp,
+	finish_at timestamp,
+	created_at timestamp default CURRENT_TIMESTAMP
 );`
