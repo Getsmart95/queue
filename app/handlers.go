@@ -308,10 +308,10 @@ func (server *MainServer) AddQueueHandler(writer http.ResponseWriter, request *h
 	return
 }
 
-func (server *MainServer) GetQueuesHandler(writer http.ResponseWriter, request *http.Request, params httprouter.Params) {
+func (server *MainServer) GetQueuesByDateHandler(writer http.ResponseWriter, request *http.Request, params httprouter.Params) {
 	writer.Header().Set(contentType, value)
 	Date := params.ByName("date")
-	queues, err := server.queueService.GetQueues(Date)
+	queues, err := server.queueService.GetQueuesByDate(Date)
 	if err != nil {
 		writer.WriteHeader(http.StatusBadRequest)
 	}
@@ -319,6 +319,109 @@ func (server *MainServer) GetQueuesHandler(writer http.ResponseWriter, request *
 	err = json.NewEncoder(writer).Encode(queues)
 	if err != nil {
 		writer.WriteHeader(http.StatusNotFound)
+		return
+	}
+	return
+}
+
+func (server *MainServer) GetQueuesByTimeHandler(writer http.ResponseWriter, request *http.Request, params httprouter.Params) {
+	writer.Header().Set(contentType, value)
+	TimeID, _ := strconv.Atoi(params.ByName("time_id"))
+	queues, err := server.queueService.GetQueuesByTime(TimeID)
+	if err != nil {
+		writer.WriteHeader(http.StatusBadRequest)
+	}
+	fmt.Println(queues)
+	err = json.NewEncoder(writer).Encode(queues)
+	if err != nil {
+		writer.WriteHeader(http.StatusNotFound)
+		return
+	}
+	return
+}
+
+func (server *MainServer) GetQueuesByStatusHandler(writer http.ResponseWriter, request *http.Request, params httprouter.Params) {
+	Status := params.ByName("status")
+	writer.Header().Set(contentType, value)
+	queues, err := server.queueService.GetQueuesByStatus(Status)
+	if err != nil {
+		writer.WriteHeader(http.StatusBadRequest)
+	}
+	fmt.Println(queues)
+	err = json.NewEncoder(writer).Encode(queues)
+	if err != nil {
+		writer.WriteHeader(http.StatusNotFound)
+		return
+	}
+	return
+}
+
+func (server *MainServer) GetQueuesByUserHandler(writer http.ResponseWriter, request *http.Request, params httprouter.Params) {
+	UserID, _ := strconv.Atoi(params.ByName("user_id"))
+	writer.Header().Set(contentType, value)
+	queues, err := server.queueService.GetQueuesByUser(UserID)
+	if err != nil {
+		writer.WriteHeader(http.StatusBadRequest)
+	}
+	fmt.Println(queues)
+	err = json.NewEncoder(writer).Encode(queues)
+	if err != nil {
+		writer.WriteHeader(http.StatusNotFound)
+		return
+	}
+	return
+}
+
+func (server *MainServer) UpdateQueueHandler(writer http.ResponseWriter, request *http.Request, params httprouter.Params) {
+	var requestBody models.Queue
+	//var responseBody models.ResponseToken
+	writer.Header().Set(contentType, value)
+	err := json.NewDecoder(request.Body).Decode(&requestBody)
+	if err != nil {
+		writer.WriteHeader(http.StatusBadRequest)
+		return
+	}
+
+	err = server.queueService.UpdateQueue(requestBody)
+	if err != nil {
+		writer.WriteHeader(http.StatusBadRequest)
+		return
+	}
+	return
+}
+
+func (server *MainServer) QueueChangeStatusHandler(writer http.ResponseWriter, request *http.Request, params httprouter.Params) {
+	var requestBody models.RequestStatus
+	//var responseBody models.ResponseToken
+	writer.Header().Set(contentType, value)
+	QueueID, _ := strconv.Atoi(params.ByName("queue_id"))
+	err := json.NewDecoder(request.Body).Decode(&requestBody)
+	if err != nil {
+		writer.WriteHeader(http.StatusBadRequest)
+		return
+	}
+
+	err = server.queueService.QueueChangeStatus(QueueID, requestBody)
+	if err != nil {
+		writer.WriteHeader(http.StatusBadRequest)
+		return
+	}
+	return
+}
+
+func (server *MainServer) UpdateUserHandler(writer http.ResponseWriter, request *http.Request, params httprouter.Params) {
+	var requestBody models.User
+	//var responseBody models.ResponseToken
+	writer.Header().Set(contentType, value)
+	err := json.NewDecoder(request.Body).Decode(&requestBody)
+	if err != nil {
+		writer.WriteHeader(http.StatusBadRequest)
+		return
+	}
+
+	err = server.userService.UpdateUser(requestBody)
+	if err != nil {
+		writer.WriteHeader(http.StatusBadRequest)
 		return
 	}
 	return

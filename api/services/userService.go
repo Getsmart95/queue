@@ -105,7 +105,7 @@ func (receiver *UserService) GetAllRoles() (Roles []models.Role, err error) {
 func (receiver *UserService) AddUser(User models.User) (err error) {
 	conn, err := receiver.pool.Acquire(context.Background())
 	if err != nil {
-		log.Fatal("can't get connection")
+		return
 	}
 
 	defer conn.Release()
@@ -149,4 +149,27 @@ func (receiver *UserService) GetUserByLogin(userLogin string) (user models.User,
 		log.Fatal("Cant add user")
 	}
 	return user, nil
+}
+
+func (receiver *UserService) UpdateUser(User models.User)(err error){
+	conn, err := receiver.pool.Acquire(context.Background())
+	if err != nil {
+		return
+	}
+
+	defer conn.Release()
+
+	_, err = conn.Exec(context.Background(), postgres.UpdateUser,
+		User.Name,
+		User.Surname,
+		User.Email,
+		User.Phone,
+		User.Status,
+		User.ID)
+
+	if err != nil {
+		fmt.Println(err)
+		return
+	}
+	return nil
 }

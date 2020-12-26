@@ -17,3 +17,9 @@ const GetTimes  =  `select * from times`
 const AddQueue  =  `insert into queues(queue_code, user_id, city_id, branch_id, purpose_id, time_id, status, date)
 					values($1, $2, $3, $4, $5, $6, $7, $8)`
 const GetQueuesByDate  =  `select * from queues where date = ($1)`
+const GetQueuesByTime  =  `select * from queues where time_id = ($1)`
+const GetQueuesByStatus  =  `select * from queues where status = ($1)`
+const GetQueuesByUser  =  `select * from queues where user_id = ($1)`
+const UpdateQueue  =  `update queues set queue_code = ($1), user_id = ($2), city_id = ($3), branch_id = ($4), purpose_id = ($5), time_id = ($6), status = ($7), date = ($8) where id = ($9)`
+const QueueChangeStatus  =  `update queues set status = ($1) where id = ($2)`
+const UpdateUser  =  `update users set name = ($1), surname = ($2), email = ($3), phone = ($4), status = ($5) where id = ($6)`

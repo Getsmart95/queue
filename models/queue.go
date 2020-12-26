@@ -2,7 +2,6 @@ package models
 
 import (
 	"github.com/jackc/pgtype"
-	"time"
 )
 
 type Queue struct {
@@ -14,8 +13,8 @@ type Queue struct {
 	PurposeID int       `json:"purpose_id"`
 	TimeID    int       `json:"time_id"`
 	Status    string    `json:"status"`
-	Date      string 	`json:"date"`
-	StartAt   time.Time `json:"start_at"`
-	FinishAt  time.Time `json:"finish_at"`
+	Date      pgtype.Date	`json:"date"`
+	StartAt   pgtype.Timestamp `json:"start_at"`
+	FinishAt  pgtype.Timestamp `json:"finish_at"`
 	CreatedAt pgtype.Timestamp `json:"created_at"`
-	}
+}
