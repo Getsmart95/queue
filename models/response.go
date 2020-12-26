@@ -13,3 +13,9 @@ type ResponseToken struct {
 	Status rune `json:"status"`
 	User User
 }
+
+type ResponseStatus struct {
+	Ok bool `json:"ok"`
+	Status rune `json:"status"`
+	Message string `json:"message"`
+}

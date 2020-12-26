@@ -4,6 +4,7 @@ import "C"
 import (
 	"context"
 	"github.com/jackc/pgx/pgxpool"
+	"log"
 	"queue/databases/postgres"
 	"queue/models"
 )
@@ -19,9 +20,9 @@ func NewMaintenanceService(pool *pgxpool.Pool) *MaintenanceService {
 func (receiver *MaintenanceService) AddCity(City models.City) (err error) {
 	conn, err := receiver.pool.Acquire(context.Background())
 	if err != nil {
+		log.Printf("can't get connection %e", err)
 		return
 	}
-
 	defer conn.Release()
 
 	_, err = conn.Exec(context.Background(), postgres.AddCity, City.Name)
@@ -34,16 +35,17 @@ func (receiver *MaintenanceService) AddCity(City models.City) (err error) {
 func (receiver *MaintenanceService) GetAllCities()(Cities []models.City, err error){
 	conn, err := receiver.pool.Acquire(context.Background())
 	if err != nil {
+		log.Printf("can't get connection %e", err)
 		return
 	}
-
 	defer conn.Release()
+
 	rows, err := conn.Query(context.Background(), postgres.GetAllCities)
 	if err != nil {
 		return
 	}
-
 	defer rows.Close()
+
 	for rows.Next(){
 		City := models.City{}
 		errRole := rows.Scan(&City.ID, &City.Name)
@@ -58,9 +60,9 @@ func (receiver *MaintenanceService) GetAllCities()(Cities []models.City, err err
 func (receiver *MaintenanceService) AddBranch(Branch models.Branch) (err error) {
 	conn, err := receiver.pool.Acquire(context.Background())
 	if err != nil {
+		log.Printf("can't get connection %e", err)
 		return
 	}
-
 	defer conn.Release()
 
 	_, err = conn.Exec(context.Background(), postgres.AddBranch, Branch.Address, Branch.CityID)
@@ -73,16 +75,18 @@ func (receiver *MaintenanceService) AddBranch(Branch models.Branch) (err error) 
 func (receiver *MaintenanceService) GetBranchByCity(CityID int)(Branches []models.Branch, err error){
 	conn, err := receiver.pool.Acquire(context.Background())
 	if err != nil {
+		log.Printf("can't get connection %e", err)
 		return
 	}
-
 	defer conn.Release()
+
 	rows, err := conn.Query(context.Background(), postgres.GetBranchByCity, CityID)
 	if err != nil {
 		return
 	}
 
 	defer rows.Close()
+
 	for rows.Next(){
 		Branch := models.Branch{}
 		errRole := rows.Scan(&Branch.ID, &Branch.Address, &Branch.CityID)
@@ -97,9 +101,9 @@ func (receiver *MaintenanceService) GetBranchByCity(CityID int)(Branches []model
 func (receiver *MaintenanceService) AddPurpose(Purpose models.Purpose) (err error) {
 	conn, err := receiver.pool.Acquire(context.Background())
 	if err != nil {
+		log.Printf("can't get connection %e", err)
 		return
 	}
-
 	defer conn.Release()
 
 	_, err = conn.Exec(context.Background(), postgres.AddPurpose, Purpose.Name)
@@ -112,16 +116,18 @@ func (receiver *MaintenanceService) AddPurpose(Purpose models.Purpose) (err erro
 func (receiver *MaintenanceService) GetPurposes()(Purposes []models.Purpose, err error){
 	conn, err := receiver.pool.Acquire(context.Background())
 	if err != nil {
+		log.Printf("can't get connection %e", err)
 		return
 	}
-
 	defer conn.Release()
+
 	rows, err := conn.Query(context.Background(), postgres.GetPurposes)
 	if err != nil {
 		return
 	}
 
 	defer rows.Close()
+
 	for rows.Next(){
 		Purpose := models.Purpose{}
 		errRole := rows.Scan(&Purpose.ID, &Purpose.Name)
@@ -136,9 +142,9 @@ func (receiver *MaintenanceService) GetPurposes()(Purposes []models.Purpose, err
 func (receiver *MaintenanceService) AddTime(Time models.Time) (err error) {
 	conn, err := receiver.pool.Acquire(context.Background())
 	if err != nil {
+		log.Printf("can't get connection %e", err)
 		return
 	}
-
 	defer conn.Release()
 
 	_, err = conn.Exec(context.Background(), postgres.AddTime, Time.Name)
@@ -151,16 +157,17 @@ func (receiver *MaintenanceService) AddTime(Time models.Time) (err error) {
 func (receiver *MaintenanceService) GetTimes()(Times []models.Time, err error){
 	conn, err := receiver.pool.Acquire(context.Background())
 	if err != nil {
+		log.Printf("can't get connection %e", err)
 		return
 	}
-
 	defer conn.Release()
+
 	rows, err := conn.Query(context.Background(), postgres.GetTimes)
 	if err != nil {
 		return
 	}
-
 	defer rows.Close()
+
 	for rows.Next(){
 		Time := models.Time{}
 		errRole := rows.Scan(&Time.ID, &Time.Name)

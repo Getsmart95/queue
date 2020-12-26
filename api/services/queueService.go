@@ -2,7 +2,6 @@ package services
 
 import (
 	"context"
-	"fmt"
 	"log"
 	"queue/databases/postgres"
 	"queue/models"
@@ -20,6 +19,7 @@ func NewQueueService(pool *pgxpool.Pool) *QueueService {
 func (receiver *QueueService) AddQueue(Queue models.Queue)(err error){
 	conn, err := receiver.pool.Acquire(context.Background())
 	if err != nil {
+		log.Printf("can't get connection %e", err)
 		return
 	}
 
@@ -36,7 +36,6 @@ func (receiver *QueueService) AddQueue(Queue models.Queue)(err error){
 		Queue.Date)
 
 	if err != nil {
-		fmt.Println(err)
 		return
 	}
 	return nil
@@ -45,7 +44,7 @@ func (receiver *QueueService) AddQueue(Queue models.Queue)(err error){
 func (receiver *QueueService) GetQueuesByDate(Date string)(queues []models.Queue, err error) {
 	conn, err := receiver.pool.Acquire(context.Background())
 	if err != nil {
-		log.Fatal("can't get connection")
+		log.Printf("can't get connection %e", err)
 		return
 	}
 	defer conn.Release()
@@ -71,9 +70,8 @@ func (receiver *QueueService) GetQueuesByDate(Date string)(queues []models.Queue
 			&Queue.StartAt,
 			&Queue.FinishAt,
 			&Queue.CreatedAt)
-		fmt.Println(rows)
 		if errQueue != nil {
-			fmt.Println(errQueue)
+			return
 		}
 		queues = append(queues, Queue)
 	}
@@ -83,7 +81,7 @@ func (receiver *QueueService) GetQueuesByDate(Date string)(queues []models.Queue
 func (receiver *QueueService) GetQueuesByTime(TimeID int)(queues []models.Queue, err error) {
 	conn, err := receiver.pool.Acquire(context.Background())
 	if err != nil {
-		log.Fatal("can't get connection")
+		log.Printf("can't get connection %e", err)
 		return
 	}
 	defer conn.Release()
@@ -109,9 +107,8 @@ func (receiver *QueueService) GetQueuesByTime(TimeID int)(queues []models.Queue,
 			&Queue.StartAt,
 			&Queue.FinishAt,
 			&Queue.CreatedAt)
-		fmt.Println(rows)
 		if errQueue != nil {
-			fmt.Println(errQueue)
+			return
 		}
 		queues = append(queues, Queue)
 	}
@@ -121,14 +118,13 @@ func (receiver *QueueService) GetQueuesByTime(TimeID int)(queues []models.Queue,
 func (receiver *QueueService) GetQueuesByStatus(Status string)(queues []models.Queue, err error) {
 	conn, err := receiver.pool.Acquire(context.Background())
 	if err != nil {
-		log.Fatal("can't get connection")
+		log.Printf("can't get connection %e", err)
 		return
 	}
 	defer conn.Release()
 
 	rows, err := conn.Query(context.Background(), postgres.GetQueuesByStatus, Status)
 	if err != nil {
-		fmt.Println(err)
 		return
 	}
 	defer rows.Close()
@@ -148,9 +144,8 @@ func (receiver *QueueService) GetQueuesByStatus(Status string)(queues []models.Q
 			&Queue.StartAt,
 			&Queue.FinishAt,
 			&Queue.CreatedAt)
-		fmt.Println(rows)
 		if errQueue != nil {
-			fmt.Println(errQueue)
+			return
 		}
 		queues = append(queues, Queue)
 	}
@@ -160,14 +155,13 @@ func (receiver *QueueService) GetQueuesByStatus(Status string)(queues []models.Q
 func (receiver *QueueService) GetQueuesByUser(UserID int)(queues []models.Queue, err error) {
 	conn, err := receiver.pool.Acquire(context.Background())
 	if err != nil {
-		log.Fatal("can't get connection")
+		log.Printf("can't get connection %e", err)
 		return
 	}
 	defer conn.Release()
 
 	rows, err := conn.Query(context.Background(), postgres.GetQueuesByUser, UserID)
 	if err != nil {
-		fmt.Println(err)
 		return
 	}
 	defer rows.Close()
@@ -187,9 +181,8 @@ func (receiver *QueueService) GetQueuesByUser(UserID int)(queues []models.Queue,
 			&Queue.StartAt,
 			&Queue.FinishAt,
 			&Queue.CreatedAt)
-		fmt.Println(rows)
 		if errQueue != nil {
-			fmt.Println(errQueue)
+			return
 		}
 		queues = append(queues, Queue)
 	}
@@ -199,6 +192,7 @@ func (receiver *QueueService) GetQueuesByUser(UserID int)(queues []models.Queue,
 func (receiver *QueueService) UpdateQueue(Queue models.Queue)(err error){
 	conn, err := receiver.pool.Acquire(context.Background())
 	if err != nil {
+		log.Printf("can't get connection %e", err)
 		return
 	}
 
@@ -216,7 +210,6 @@ func (receiver *QueueService) UpdateQueue(Queue models.Queue)(err error){
 		Queue.ID)
 
 	if err != nil {
-		fmt.Println(err)
 		return
 	}
 	return nil
@@ -225,6 +218,7 @@ func (receiver *QueueService) UpdateQueue(Queue models.Queue)(err error){
 func (receiver *QueueService) QueueChangeStatus(QueueID int, Status models.RequestStatus)(err error){
 	conn, err := receiver.pool.Acquire(context.Background())
 	if err != nil {
+		log.Printf("can't get connection %e", err)
 		return
 	}
 
@@ -233,7 +227,6 @@ func (receiver *QueueService) QueueChangeStatus(QueueID int, Status models.Reque
 	_, err = conn.Exec(context.Background(), postgres.QueueChangeStatus,Status.Status, QueueID)
 
 	if err != nil {
-		fmt.Println(err)
 		return
 	}
 	return nil
