@@ -33,8 +33,7 @@ func main() {
 	maintenanceService := services.NewMaintenanceService(pool)
 	queueService := services.NewQueueService(pool)
 	dbInit := postgres.NewDBInit(pool)
-	//tokenSvc := token.NewTokenSvc(svc, []byte(`surush`))
-	//secret := jwt.Secret(`surush`)
+
 	server := app.NewMainServer(pool, router,  dbInit, userService, maintenanceService, queueService)
 	server.Start()
 	fmt.Println(address)

@@ -34,5 +34,5 @@ func (server *MainServer) InitRoutes() {
 	server.router.PUT("/api/queues/updateQueue", middlewares.JWT()(server.UpdateQueueHandler))
 	server.router.PUT("/api/queues/changeStatus/:queue_id", middlewares.JWT()(server.QueueChangeStatusHandler))
 	// Notification
-	//server.router.POST("/api/sms/send", server.SendNotificationHandler)
+	server.router.POST("/api/sms/send", server.NotificationHandler)
 }

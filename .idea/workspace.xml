@@ -2,20 +2,12 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="c5b0469c-dab2-4cd0-82a6-fe8259361770" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/api/middlewares/guardRole.go" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/api/middlewares/jwt.go" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/api/controllers/userController.go" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/api/services/userService.go" beforeDir="false" afterPath="$PROJECT_DIR$/api/services/userService.go" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/app/handlers.go" beforeDir="false" afterPath="$PROJECT_DIR$/app/handlers.go" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/app/routers.go" beforeDir="false" afterPath="$PROJECT_DIR$/app/routers.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/databases/postgres/DMLs.go" beforeDir="false" afterPath="$PROJECT_DIR$/databases/postgres/DMLs.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/databases/postgres/dbInit.go" beforeDir="false" afterPath="$PROJECT_DIR$/databases/postgres/dbInit.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/databases/postgres/seeders.go" beforeDir="false" afterPath="$PROJECT_DIR$/databases/postgres/seeders.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/middleware/jwt.go" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/main.go" beforeDir="false" afterPath="$PROJECT_DIR$/main.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/models/requests.go" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/models/response.go" beforeDir="false" afterPath="$PROJECT_DIR$/models/response.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/models/user.go" beforeDir="false" afterPath="$PROJECT_DIR$/models/user.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/tokens/tokens.go" beforeDir="false" afterPath="$PROJECT_DIR$/tokens/tokens.go" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -145,11 +137,6 @@
                 <item name="root:postgres@localhost" type="7427dc5b:ServiceModel$ServiceGroupNode" />
                 <item name="com.intellij.database.console.session.MessageBusSession@22f9811d" type="9fbbdea:ServiceModel$ServiceNode" />
               </path>
-              <path>
-                <item name="services root" type="e789fda9:ObjectUtils$Sentinel" />
-                <item name="root:postgres@localhost" type="7427dc5b:ServiceModel$ServiceGroupNode" />
-                <item name="com.intellij.database.console.session.MessageBusSession@7b44a0b2" type="9fbbdea:ServiceModel$ServiceNode" />
-              </path>
             </expand>
             <select />
           </treeState>
@@ -165,10 +152,10 @@
       <screen x="0" y="0" width="1536" height="834" />
     </state>
     <state x="361" y="76" key="#Inspections/0.0.1536.834@0.0.1536.834" timestamp="1608882990073" />
-    <state x="361" y="76" key="#com.intellij.execution.impl.EditConfigurationsDialog" timestamp="1608750870598">
+    <state x="361" y="76" key="#com.intellij.execution.impl.EditConfigurationsDialog" timestamp="1609071769419">
       <screen x="0" y="0" width="1536" height="834" />
     </state>
-    <state x="361" y="76" key="#com.intellij.execution.impl.EditConfigurationsDialog/0.0.1536.834@0.0.1536.834" timestamp="1608750870598" />
+    <state x="361" y="76" key="#com.intellij.execution.impl.EditConfigurationsDialog/0.0.1536.834@0.0.1536.834" timestamp="1609071769419" />
     <state x="574" y="134" key="#com.intellij.ide.util.MemberChooser" timestamp="1609009393554">
       <screen x="0" y="0" width="1536" height="834" />
     </state>

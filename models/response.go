@@ -19,21 +19,21 @@ type ResponseUser struct {
 	CreatedAt time.Time `json:"created_at"`
 }
 type ResponseToken struct {
-	Ok bool `json:"ok"`
-	Token string `json:"token"`
-	ExpiredIn int `json:"expired_In"`
-	Status rune `json:"status"`
-	User ResponseUser
+		Ok        bool   `json:"ok"`
+		Token     string `json:"token"`
+		ExpiredIn int    `json:"expired_In"`
+		Status    rune   `json:"status"`
+		User      ResponseUser
 }
 
 type ResponseStatus struct {
-	Ok bool `json:"ok"`
-	Status rune `json:"status"`
-	Message string `json:"message"`
+		Ok      bool   `json:"ok"`
+		Status  rune   `json:"status"`
+		Message string `json:"message"`
 }
 
 type JWTUserRole struct {
-	RoleID int `json:"role_id"`
-	UserID int `json:"user_id"`
-	Name string `json:"name"`
+		RoleID int    `json:"role_id"`
+		UserID int    `json:"user_id"`
+		Name   string `json:"name"`
 }

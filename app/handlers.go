@@ -503,3 +503,18 @@ func (server *MainServer) QueueChangeStatusHandler(writer http.ResponseWriter, r
 	return
 }
 
+func (server *MainServer) NotificationHandler(writer http.ResponseWriter, request *http.Request, params httprouter.Params) {
+	//var requestBody models.RequestStatus
+	var responseBody models.ResponseStatus
+	writer.Header().Set(contentType, value)
+
+	responseBody.Ok = true
+	responseBody.Status = 200
+	responseBody.Message = "Уведомление успешно отправлено"
+	err := json.NewEncoder(writer).Encode(responseBody)
+	if err != nil {
+		writer.WriteHeader(http.StatusNotFound)
+		return
+	}
+	return
+}
