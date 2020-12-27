@@ -35,14 +35,14 @@ func (receiver *UserService) Registration(User models.User) (err error) {
 	return nil
 }
 
-func (receiver *UserService) Authentication(User models.User) (Login bool, Password bool, user models.User, err error) {
+func (receiver *UserService) Authentication(User models.User) (Login bool, Password bool, responseUser models.ResponseUser, err error) {
 	conn, err := receiver.pool.Acquire(context.Background())
 	if err != nil {
 		log.Printf("can't get connection %e", err)
 		return
 	}
 	defer conn.Release()
-
+	var user models.User
 	err = conn.QueryRow(context.Background(), postgres.GetUserByLogin, User.Login).Scan(
 		&user.ID,
 		&user.Name,
@@ -53,20 +53,33 @@ func (receiver *UserService) Authentication(User models.User) (Login bool, Passw
 		&user.Phone,
 		&user.Status,
 		&user.CreatedAt)
-	fmt.Println(MakeHash(User.Password))
-	fmt.Println(user.Password)
-	fmt.Println(CompareHashWithPassword(user.Password,User.Password))
 	if err != nil {
-		return false, false, user, err
+		return false, false, responseUser, err
 	}
+
+	responseUser = GetResponseUser(user)
+
 	errHash := CompareHashWithPassword(user.Password, User.Password)
 	if errHash != nil {
-		return true, false, user, err
+		return true, false, responseUser, err
 	}
 
-	return true, true, user, nil
+	return true, true, responseUser, nil
 }
 
+func GetResponseUser(User models.User) (responseUser models.ResponseUser) {
+
+	responseUser.ID = User.ID
+	responseUser.Name = User.Name
+	responseUser.Surname = User.Surname
+	responseUser.Login = User.Login
+	responseUser.Email = User.Email
+	responseUser.Phone = User.Phone
+	responseUser.Status = User.Status
+	responseUser.CreatedAt = User.CreatedAt
+
+	return responseUser
+}
 func CompareHashWithPassword(HashedPassword string, Password string) error {
 	result := bcrypt.CompareHashAndPassword([]byte(HashedPassword), []byte(Password))
 	return result
@@ -105,6 +118,24 @@ func (receiver *UserService) GetAllRoles() (Roles []models.Role, err error) {
 	return Roles, nil
 }
 
+func (receiver *UserService) GetRoleByUser(Login string) (role models.JWTUserRole, err error) {
+	conn, err := receiver.pool.Acquire(context.Background())
+	if err != nil {
+		log.Printf("can't get connection %e", err)
+		return
+	}
+
+	defer conn.Release()
+	err = conn.QueryRow(context.Background(), postgres.GetRoleByUser, Login).Scan(&role.RoleID, &role.UserID, &role.Name)
+	if err != nil {
+		fmt.Println(err)
+		return
+	}
+
+	return role, nil
+}
+
+
 func (receiver *UserService) AddUser(User models.User) (err error) {
 	conn, err := receiver.pool.Acquire(context.Background())
 	if err != nil {
@@ -134,13 +165,14 @@ func (receiver *UserService) AddUserRole(userID int, roleID int) (err error) {
 	return nil
 }
 
-func (receiver *UserService) GetUserByLogin(userLogin string) (user models.User, err error) {
+func (receiver *UserService) GetUserByLogin(userLogin string) (responseUser models.ResponseUser, err error) {
 	conn, err := receiver.pool.Acquire(context.Background())
 	if err != nil {
 		log.Printf("can't get connection %e", err)
 		return
 	}
 	defer conn.Release()
+	var user models.User
 	err = conn.QueryRow(context.Background(), postgres.GetUserByLogin, userLogin).Scan(
 		&user.ID,
 		&user.Name,
@@ -154,7 +186,9 @@ func (receiver *UserService) GetUserByLogin(userLogin string) (user models.User,
 	if err != nil {
 		return
 	}
-	return user, nil
+
+	responseUser = GetResponseUser(user)
+	return responseUser, nil
 }
 
 func (receiver *UserService) UpdateUser(User models.User)(err error){

@@ -53,7 +53,7 @@ func (server *MainServer) RegisterHandler(writer http.ResponseWriter, request *h
 }
 
 func (server *MainServer) LoginHandler(writer http.ResponseWriter, request *http.Request, _ httprouter.Params) {
-	var User models.User
+	var User models.ResponseUser
 	var Status models.CredentialStatus
 	var requestBody models.User
 	var responseBody models.ResponseToken
@@ -448,6 +448,7 @@ func (server *MainServer) GetQueuesByUserHandler(writer http.ResponseWriter, req
 
 func (server *MainServer) UpdateQueueHandler(writer http.ResponseWriter, request *http.Request, params httprouter.Params) {
 	var requestBody models.Queue
+	var responseBody models.ResponseStatus
 	writer.Header().Set(contentType, value)
 
 	err := json.NewDecoder(request.Body).Decode(&requestBody)
@@ -461,11 +462,21 @@ func (server *MainServer) UpdateQueueHandler(writer http.ResponseWriter, request
 		writer.WriteHeader(http.StatusBadRequest)
 		return
 	}
+
+	responseBody.Ok = true
+	responseBody.Status = 200
+	responseBody.Message = "Запись успешно обновлен"
+	err = json.NewEncoder(writer).Encode(responseBody)
+	if err != nil {
+		writer.WriteHeader(http.StatusNotFound)
+		return
+	}
 	return
 }
 
 func (server *MainServer) QueueChangeStatusHandler(writer http.ResponseWriter, request *http.Request, params httprouter.Params) {
 	var requestBody models.RequestStatus
+	var responseBody models.ResponseStatus
 	writer.Header().Set(contentType, value)
 
 	QueueID, _ := strconv.Atoi(params.ByName("queue_id"))
@@ -478,6 +489,15 @@ func (server *MainServer) QueueChangeStatusHandler(writer http.ResponseWriter, r
 	err = server.queueService.QueueChangeStatus(QueueID, requestBody)
 	if err != nil {
 		writer.WriteHeader(http.StatusBadRequest)
+		return
+	}
+
+	responseBody.Ok = true
+	responseBody.Status = 200
+	responseBody.Message = "Статус успешно изменен"
+	err = json.NewEncoder(writer).Encode(responseBody)
+	if err != nil {
+		writer.WriteHeader(http.StatusNotFound)
 		return
 	}
 	return

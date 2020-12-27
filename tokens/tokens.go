@@ -30,10 +30,16 @@ func SetToken(login string, password string) (Token string, expiredIn int) {
 	return Token, lifetime
 }
 
-func ParseToken(tokenString string) *MyCustomClaims {
-	token, _ := jwt.ParseWithClaims(tokenString, &MyCustomClaims{}, func(token *jwt.Token) (interface{}, error) {
-		return nil, nil
+func ParseToken(tokenString string) (claims *MyCustomClaims, ok bool, err error) {
+	token, err := jwt.ParseWithClaims(tokenString, &MyCustomClaims{}, func(token *jwt.Token) (interface{}, error) {
+		return []byte("AllYourBase"), nil
 	})
-	claims := token.Claims.(*MyCustomClaims)
-	return claims
+	if err != nil {
+		return nil, false, err
+	}
+	if Claims, ok := token.Claims.(*MyCustomClaims); ok && token.Valid {
+		return Claims, true,nil
+	} else {
+		return nil,false, nil
+	}
 }

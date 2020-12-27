@@ -23,3 +23,6 @@ const GetQueuesByUser  =  `select * from queues where user_id = ($1)`
 const UpdateQueue  =  `update queues set queue_code = ($1), user_id = ($2), city_id = ($3), branch_id = ($4), purpose_id = ($5), time_id = ($6), status = ($7), date = ($8) where id = ($9)`
 const QueueChangeStatus  =  `update queues set status = ($1) where id = ($2)`
 const UpdateUser  =  `update users set name = ($1), surname = ($2), email = ($3), phone = ($4), status = ($5) where id = ($6)`
+const GetRoleByUser  =  `select ur.role_id, u.id, r.name 
+						 from userrole ur, users u, roles r 
+						 where u.id = ur.user_id and r.id = ur.role_id and u.login = ($1)`

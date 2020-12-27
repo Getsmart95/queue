@@ -14,14 +14,4 @@ type User struct {
 		CreatedAt time.Time `json:"created_at"`
 }
 
-type ResponseUser struct {
-	ID        int       `json:"id"`
-	Name      string    `json:"name"`
-	Surname   string    `json:"surname"`
-	Login     string    `json:"login"`
-	Email     string    `json:"email"`
-	Phone     string    `json:"phone"`
-	Status    bool      `json:"status"`
-	CreatedAt time.Time `json:"created_at"`
-}
 
