@@ -12,5 +12,13 @@ type RequestUser struct {
 	UserID int `json:"user_id"`
 }
 
+type RequestLogin struct {
+	Login string `json:"login"`
+}
+
+type RequestTerminal struct {
+	PurposeID int `json:"purpose_id"`
+	Date string `json:"date"`
+}
 
 

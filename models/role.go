@@ -6,9 +6,3 @@ type Role struct {
 	DisplayName string	`json:"display_name"`
 	Description string	`json:"description"`
 }
-
-type (
-	RoleList struct {
-		Roles []Role
-	}
-)

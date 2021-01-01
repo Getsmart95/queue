@@ -1,11 +1,11 @@
 package app
 
 import (
+	"github.com/jackc/pgx/pgxpool"
+	"github.com/julienschmidt/httprouter"
 	"net/http"
 	"queue/api/services"
 	"queue/databases/postgres"
-	"github.com/jackc/pgx/pgxpool"
-	"github.com/julienschmidt/httprouter"
 )
 
 type MainServer struct {
@@ -22,8 +22,14 @@ func NewMainServer(pool *pgxpool.Pool, router *httprouter.Router, initilize *pos
 }
 
 
-func (server *MainServer) ServeHTTP(w http.ResponseWriter, r *http.Request){
-	server.router.ServeHTTP(w, r)
+func (server *MainServer) ServeHTTP(writer http.ResponseWriter, request *http.Request){
+
+	writer.Header().Set("Content-Type", "application/json")
+	writer.Header().Set("Access-Control-Allow-Origin", "http://localhost:3000")
+	writer.Header().Set("Access-Control-Allow-Methods", "GET, POST, PUT, OPTIONS")
+	writer.Header().Set("Access-Control-Allow-Headers", "Content-Type, Authorization, RefreshToken")
+
+	server.router.ServeHTTP(writer, request)
 }
 
 func(server *MainServer) Start() {

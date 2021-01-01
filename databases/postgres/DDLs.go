@@ -5,7 +5,7 @@ const CreateUsersTable  =  `Create table if not exists users (
 	name varchar(60) not null,
 	surname varchar(60) not null,
 	login varchar(60) not null unique,
-	password  text not null,
+	password  text ,
 	email varchar(60) unique,
 	phone varchar(60) unique,
 	status boolean not null,
@@ -32,7 +32,7 @@ const CreateRolesTable  =  `Create table if not exists roles (
 
 const CreateUserRoleTable  =  `Create table if not exists userRole (
 	role_id integer references roles,
-	user_id integer references users
+	user_id integer references users unique
 );`
 
 const CreatePurposesTable  =  `Create table if not exists purposes (
@@ -47,15 +47,24 @@ const CreateTimesTable  =  `Create table if not exists times (
 
 const CreateQueuesTable  =  `Create table if not exists queues (
 	id bigserial primary key,
-	queue_code varchar(30) not null,
+	queue_code integer not null,
+	terminal_id integer references terminals("terminal_number"),
 	user_id integer references users,
-	purpose_id integer references purposes,
-	time_id integer references times,
 	city_id integer references cities,
 	branch_id integer references branches,
+	purpose_id integer references purposes,
+	time_id integer references times,
 	status varchar(60) not null,
 	date date default current_date,
 	start_at timestamp,
 	finish_at timestamp,
 	created_at timestamp default CURRENT_TIMESTAMP
+);`
+
+const CreateTerminalsTable  =  `Create table if not exists terminals (
+	id bigserial primary key,
+	terminal_number integer not null unique,
+	city_id integer references cities,
+	branch_id integer references branches,
+	user_id integer references users
 );`

@@ -4,18 +4,45 @@ import (
 	"encoding/json"
 	"github.com/julienschmidt/httprouter"
 	"net/http"
+	"queue/api/middlewares"
 	"queue/models"
 	"queue/tokens"
 	"strconv"
 )
-const contentType = "Content-Type"
-const value = "application/json; charset=utf-8"
+
+func (server *MainServer) CheckUserHandler(writer http.ResponseWriter, request *http.Request, _ httprouter.Params) {
+	var requestBody models.RequestLogin
+	var responseBody models.ResponseStatus
+	err := json.NewDecoder(request.Body).Decode(&requestBody)
+	if err != nil {
+		json.NewEncoder(writer).Encode("Invalid json")
+		writer.WriteHeader(http.StatusBadRequest)
+		return
+	}
+
+	result, err := server.userService.CheckUser(requestBody.Login)
+	if err != nil {
+		json.NewEncoder(writer).Encode("Undefined error #{err}")
+		writer.WriteHeader(http.StatusBadRequest)
+		return
+	}
+
+	if result == false {
+		responseBody.Ok = false
+		responseBody.Message = "Пользователь не существует"
+		json.NewEncoder(writer).Encode(responseBody)
+		return
+	} else if result == true {
+		responseBody.Ok = true
+		responseBody.Message = "Пользователь существует"
+	}
+}
 
 func (server *MainServer) RegisterHandler(writer http.ResponseWriter, request *http.Request, _ httprouter.Params) {
 	var requestBody models.User
 	var responseBody models.ResponseToken
 	var Status models.CredentialStatus
-	writer.Header().Set(contentType, value)
+
 	err := json.NewDecoder(request.Body).Decode(&requestBody)
 	if err != nil {
 		writer.WriteHeader(http.StatusBadRequest)
@@ -28,21 +55,19 @@ func (server *MainServer) RegisterHandler(writer http.ResponseWriter, request *h
 		json.NewEncoder(writer).Encode(Status)
 		return
 	}
-	user, err := server.userService.GetUserByLogin(requestBody.Login)
+	userID, responseUser, err := server.userService.GetUserByLogin(requestBody.Login)
 	//	Add role "user"
 	roleID := 3
-	err = server.userService.AddUserRole(user.ID, roleID)
+	err = server.userService.AddUserRole(userID, roleID)
 	if err != nil {
 		writer.WriteHeader(http.StatusBadRequest)
 		return
 	}
-	token, expiredIn := tokens.SetToken(requestBody.Login, requestBody.Password)
+	token := tokens.SetToken(userID, responseUser.Login)
 
 	responseBody.Ok = true
 	responseBody.Token = token
-	responseBody.ExpiredIn = expiredIn
-	responseBody.Status = 200
-	responseBody.User = user
+	responseBody.User = responseUser
 
 	err = json.NewEncoder(writer).Encode(responseBody)
 	if err != nil {
@@ -57,16 +82,17 @@ func (server *MainServer) LoginHandler(writer http.ResponseWriter, request *http
 	var Status models.CredentialStatus
 	var requestBody models.User
 	var responseBody models.ResponseToken
-	writer.Header().Set(contentType, value)
+
 
 	err := json.NewDecoder(request.Body).Decode(&requestBody)
 
 	if err != nil {
+		json.NewEncoder(writer).Encode("Invalid json")
 		writer.WriteHeader(http.StatusBadRequest)
 		return
 	}
-
-	Status.Login ,Status.Password, User, err = server.userService.Authentication(requestBody)
+	var userID int
+	Status.Login ,Status.Password, userID, User, err = server.userService.Authentication(requestBody)
 
 	if err != nil && Status.Login == false {
 		writer.WriteHeader(http.StatusBadRequest)
@@ -80,12 +106,10 @@ func (server *MainServer) LoginHandler(writer http.ResponseWriter, request *http
 		return
 	}
 
-	token, expiredIn := tokens.SetToken(requestBody.Login, requestBody.Password)
+	token := tokens.SetToken(userID, User.Login)
 
 	responseBody.Ok = true
 	responseBody.Token = token
-	responseBody.ExpiredIn = expiredIn
-	responseBody.Status = 200
 	responseBody.User = User
 
 	err = json.NewEncoder(writer).Encode(responseBody)
@@ -97,7 +121,6 @@ func (server *MainServer) LoginHandler(writer http.ResponseWriter, request *http
 }
 
 func (server *MainServer) GetRolesHandler(writer http.ResponseWriter, request *http.Request, _ httprouter.Params) {
-	writer.Header().Set(contentType, value)
 	roles, err := server.userService.GetAllRoles()
 	if err != nil {
 		writer.WriteHeader(http.StatusBadRequest)
@@ -110,13 +133,13 @@ func (server *MainServer) GetRolesHandler(writer http.ResponseWriter, request *h
 	return
 }
 
-func (server *MainServer) AddUserHandler(writer http.ResponseWriter, request *http.Request, params httprouter.Params) {
+func (server *MainServer) AddManagerHandler(writer http.ResponseWriter, request *http.Request, params httprouter.Params) {
 	var requestBody models.User
 	var responseBody models.ResponseStatus
-	writer.Header().Set(contentType, value)
 
 	err := json.NewDecoder(request.Body).Decode(&requestBody)
 	if err != nil {
+		json.NewEncoder(writer).Encode("Invalid json")
 		writer.WriteHeader(http.StatusBadRequest)
 		return
 	}
@@ -125,15 +148,15 @@ func (server *MainServer) AddUserHandler(writer http.ResponseWriter, request *ht
 		writer.WriteHeader(http.StatusNotFound)
 		return
 	}
-	user, err := server.userService.GetUserByLogin(requestBody.Login)
-	roleID, _ := strconv.Atoi(params.ByName("role_id"))
-
-	err = server.userService.AddUserRole(user.ID, roleID)
+	userID, _, err := server.userService.GetUserByLogin(requestBody.Login)
+	//roleID, _ := strconv.Atoi(params.ByName("role_id")) // Можно использовать если необходимо будет добавлять Главного администратора
+	// Add role "manager"
+	roleID := 2
+	err = server.userService.AddUserRole(userID, roleID)
 	if err != nil {
 		writer.WriteHeader(http.StatusBadRequest)
 	}
 	responseBody.Ok = true
-	responseBody.Status = 200
 	responseBody.Message = "Пользователь успешно добавлен"
 	err = json.NewEncoder(writer).Encode(responseBody)
 	if err != nil {
@@ -143,13 +166,13 @@ func (server *MainServer) AddUserHandler(writer http.ResponseWriter, request *ht
 	return
 }
 
-func (server *MainServer) UpdateUserHandler(writer http.ResponseWriter, request *http.Request, params httprouter.Params) {
+func (server *MainServer) UpdateManagerHandler(writer http.ResponseWriter, request *http.Request, params httprouter.Params) {
 	var requestBody models.User
 	var responseBody models.ResponseStatus
-	writer.Header().Set(contentType, value)
 
 	err := json.NewDecoder(request.Body).Decode(&requestBody)
 	if err != nil {
+		json.NewEncoder(writer).Encode("Invalid json")
 		writer.WriteHeader(http.StatusBadRequest)
 		return
 	}
@@ -160,7 +183,6 @@ func (server *MainServer) UpdateUserHandler(writer http.ResponseWriter, request 
 		return
 	}
 	responseBody.Ok = true
-	responseBody.Status = 200
 	responseBody.Message = "Профиль успешно обновлен"
 	err = json.NewEncoder(writer).Encode(responseBody)
 	if err != nil {
@@ -174,10 +196,10 @@ func (server *MainServer) UpdateUserHandler(writer http.ResponseWriter, request 
 func (server *MainServer) AddCity(writer http.ResponseWriter, request *http.Request, _ httprouter.Params) {
 	var requestBody models.City
 	var responseBody models.ResponseStatus
-	writer.Header().Set(contentType, value)
 
 	err := json.NewDecoder(request.Body).Decode(&requestBody)
 	if err != nil {
+		json.NewEncoder(writer).Encode("Invalid json")
 		writer.WriteHeader(http.StatusBadRequest)
 		return
 	}
@@ -189,7 +211,6 @@ func (server *MainServer) AddCity(writer http.ResponseWriter, request *http.Requ
 	}
 
 	responseBody.Ok = true
-	responseBody.Status = 200
 	responseBody.Message = "Город успешно добавлен"
 	err = json.NewEncoder(writer).Encode(responseBody)
 	if err != nil {
@@ -201,7 +222,6 @@ func (server *MainServer) AddCity(writer http.ResponseWriter, request *http.Requ
 }
 
 func (server *MainServer) GetAllCities(writer http.ResponseWriter, request *http.Request, params httprouter.Params) {
-	writer.Header().Set(contentType, value)
 
 	cities, err := server.maintenanceService.GetAllCities()
 	if err != nil {
@@ -219,10 +239,10 @@ func (server *MainServer) GetAllCities(writer http.ResponseWriter, request *http
 func (server *MainServer) AddBranchHandler(writer http.ResponseWriter, request *http.Request, _ httprouter.Params) {
 	var requestBody models.Branch
 	var responseBody models.ResponseStatus
-	writer.Header().Set(contentType, value)
 
 	err := json.NewDecoder(request.Body).Decode(&requestBody)
 	if err != nil {
+		json.NewEncoder(writer).Encode("Invalid json")
 		writer.WriteHeader(http.StatusBadRequest)
 		return
 	}
@@ -234,7 +254,6 @@ func (server *MainServer) AddBranchHandler(writer http.ResponseWriter, request *
 	}
 
 	responseBody.Ok = true
-	responseBody.Status = 200
 	responseBody.Message = "Отделение успешно добавлена"
 	err = json.NewEncoder(writer).Encode(responseBody)
 	if err != nil {
@@ -246,7 +265,6 @@ func (server *MainServer) AddBranchHandler(writer http.ResponseWriter, request *
 
 func (server *MainServer) GetBranchByCityHandler(writer http.ResponseWriter, request *http.Request, params httprouter.Params) {
 	cityID, _ := strconv.Atoi(params.ByName("city_id"))
-	writer.Header().Set(contentType, value)
 
 	branches, err := server.maintenanceService.GetBranchByCity(cityID)
 	if err != nil {
@@ -264,10 +282,10 @@ func (server *MainServer) GetBranchByCityHandler(writer http.ResponseWriter, req
 func (server *MainServer) AddPurposeHandler(writer http.ResponseWriter, request *http.Request, _ httprouter.Params) {
 	var requestBody models.Purpose
 	var responseBody models.ResponseStatus
-	writer.Header().Set(contentType, value)
 
 	err := json.NewDecoder(request.Body).Decode(&requestBody)
 	if err != nil {
+		json.NewEncoder(writer).Encode("Invalid json")
 		writer.WriteHeader(http.StatusBadRequest)
 		return
 	}
@@ -279,7 +297,6 @@ func (server *MainServer) AddPurposeHandler(writer http.ResponseWriter, request 
 	}
 
 	responseBody.Ok = true
-	responseBody.Status = 200
 	responseBody.Message = "Цель визита успешно добавлена"
 	err = json.NewEncoder(writer).Encode(responseBody)
 	if err != nil {
@@ -290,7 +307,6 @@ func (server *MainServer) AddPurposeHandler(writer http.ResponseWriter, request 
 }
 
 func (server *MainServer) GetPurposes(writer http.ResponseWriter, request *http.Request, _ httprouter.Params) {
-	writer.Header().Set(contentType, value)
 
 	purposes, err := server.maintenanceService.GetPurposes()
 	if err != nil {
@@ -309,10 +325,10 @@ func (server *MainServer) GetPurposes(writer http.ResponseWriter, request *http.
 func (server *MainServer) AddTimesHandler(writer http.ResponseWriter, request *http.Request, _ httprouter.Params) {
 	var requestBody models.Time
 	var responseBody models.ResponseStatus
-	writer.Header().Set(contentType, value)
 
 	err := json.NewDecoder(request.Body).Decode(&requestBody)
 	if err != nil {
+		json.NewEncoder(writer).Encode("Invalid json")
 		writer.WriteHeader(http.StatusBadRequest)
 		return
 	}
@@ -324,7 +340,6 @@ func (server *MainServer) AddTimesHandler(writer http.ResponseWriter, request *h
 	}
 
 	responseBody.Ok = true
-	responseBody.Status = 200
 	responseBody.Message = "Время успешно добавлена"
 	err = json.NewEncoder(writer).Encode(responseBody)
 	if err != nil {
@@ -335,7 +350,6 @@ func (server *MainServer) AddTimesHandler(writer http.ResponseWriter, request *h
 }
 
 func (server *MainServer) GetTimes(writer http.ResponseWriter, request *http.Request, _ httprouter.Params) {
-	writer.Header().Set(contentType, value)
 
 	times, err := server.maintenanceService.GetTimes()
 	if err != nil {
@@ -351,24 +365,22 @@ func (server *MainServer) GetTimes(writer http.ResponseWriter, request *http.Req
 }
 
 func (server *MainServer) AddQueueHandler(writer http.ResponseWriter, request *http.Request, params httprouter.Params) {
-	var requestBody models.Queue
+	var requestBody models.RequestTerminal
 	var responseBody models.ResponseStatus
-	writer.Header().Set(contentType, value)
-
+	claims := middlewares.JWT(writer, request, params)
 	err := json.NewDecoder(request.Body).Decode(&requestBody)
 	if err != nil {
+		json.NewEncoder(writer).Encode("Invalid json")
 		writer.WriteHeader(http.StatusBadRequest)
 		return
 	}
-
-	err = server.queueService.AddQueue(requestBody)
+	queueCode, err := server.queueService.GetLastQueueByDate(requestBody.Date)
+	err = server.queueService.AddQueue(requestBody, queueCode, claims)
 	if err != nil {
 		writer.WriteHeader(http.StatusBadRequest)
 		return
 	}
-
 	responseBody.Ok = true
-	responseBody.Status = 200
 	responseBody.Message = "Запись в очередь успешно добавлена"
 	err = json.NewEncoder(writer).Encode(responseBody)
 	if err != nil {
@@ -379,7 +391,6 @@ func (server *MainServer) AddQueueHandler(writer http.ResponseWriter, request *h
 }
 
 func (server *MainServer) GetQueuesByDateHandler(writer http.ResponseWriter, request *http.Request, params httprouter.Params) {
-	writer.Header().Set(contentType, value)
 
 	Date := params.ByName("date")
 	queues, err := server.queueService.GetQueuesByDate(Date)
@@ -396,7 +407,6 @@ func (server *MainServer) GetQueuesByDateHandler(writer http.ResponseWriter, req
 }
 
 func (server *MainServer) GetQueuesByTimeHandler(writer http.ResponseWriter, request *http.Request, params httprouter.Params) {
-	writer.Header().Set(contentType, value)
 
 	TimeID, _ := strconv.Atoi(params.ByName("time_id"))
 	queues, err := server.queueService.GetQueuesByTime(TimeID)
@@ -413,7 +423,6 @@ func (server *MainServer) GetQueuesByTimeHandler(writer http.ResponseWriter, req
 }
 
 func (server *MainServer) GetQueuesByStatusHandler(writer http.ResponseWriter, request *http.Request, params httprouter.Params) {
-	writer.Header().Set(contentType, value)
 
 	Status := params.ByName("status")
 	queues, err := server.queueService.GetQueuesByStatus(Status)
@@ -430,7 +439,6 @@ func (server *MainServer) GetQueuesByStatusHandler(writer http.ResponseWriter, r
 }
 
 func (server *MainServer) GetQueuesByUserHandler(writer http.ResponseWriter, request *http.Request, params httprouter.Params) {
-	writer.Header().Set(contentType, value)
 
 	UserID, _ := strconv.Atoi(params.ByName("user_id"))
 	queues, err := server.queueService.GetQueuesByUser(UserID)
@@ -449,10 +457,10 @@ func (server *MainServer) GetQueuesByUserHandler(writer http.ResponseWriter, req
 func (server *MainServer) UpdateQueueHandler(writer http.ResponseWriter, request *http.Request, params httprouter.Params) {
 	var requestBody models.Queue
 	var responseBody models.ResponseStatus
-	writer.Header().Set(contentType, value)
 
 	err := json.NewDecoder(request.Body).Decode(&requestBody)
 	if err != nil {
+		json.NewEncoder(writer).Encode("Invalid json")
 		writer.WriteHeader(http.StatusBadRequest)
 		return
 	}
@@ -464,7 +472,6 @@ func (server *MainServer) UpdateQueueHandler(writer http.ResponseWriter, request
 	}
 
 	responseBody.Ok = true
-	responseBody.Status = 200
 	responseBody.Message = "Запись успешно обновлен"
 	err = json.NewEncoder(writer).Encode(responseBody)
 	if err != nil {
@@ -477,11 +484,11 @@ func (server *MainServer) UpdateQueueHandler(writer http.ResponseWriter, request
 func (server *MainServer) QueueChangeStatusHandler(writer http.ResponseWriter, request *http.Request, params httprouter.Params) {
 	var requestBody models.RequestStatus
 	var responseBody models.ResponseStatus
-	writer.Header().Set(contentType, value)
 
 	QueueID, _ := strconv.Atoi(params.ByName("queue_id"))
 	err := json.NewDecoder(request.Body).Decode(&requestBody)
 	if err != nil {
+		json.NewEncoder(writer).Encode("Invalid json")
 		writer.WriteHeader(http.StatusBadRequest)
 		return
 	}
@@ -493,8 +500,7 @@ func (server *MainServer) QueueChangeStatusHandler(writer http.ResponseWriter, r
 	}
 
 	responseBody.Ok = true
-	responseBody.Status = 200
-	responseBody.Message = "Статус успешно изменен"
+	responseBody.Message = "Запись в очередь успешно добавлена"
 	err = json.NewEncoder(writer).Encode(responseBody)
 	if err != nil {
 		writer.WriteHeader(http.StatusNotFound)
@@ -504,12 +510,9 @@ func (server *MainServer) QueueChangeStatusHandler(writer http.ResponseWriter, r
 }
 
 func (server *MainServer) NotificationHandler(writer http.ResponseWriter, request *http.Request, params httprouter.Params) {
-	//var requestBody models.RequestStatus
 	var responseBody models.ResponseStatus
-	writer.Header().Set(contentType, value)
 
 	responseBody.Ok = true
-	responseBody.Status = 200
 	responseBody.Message = "Уведомление успешно отправлено"
 	err := json.NewEncoder(writer).Encode(responseBody)
 	if err != nil {
@@ -518,3 +521,30 @@ func (server *MainServer) NotificationHandler(writer http.ResponseWriter, reques
 	}
 	return
 }
+
+func (server *MainServer) AddTerminalHandler(writer http.ResponseWriter, request *http.Request, params httprouter.Params) {
+	var requestBody models.Terminal
+	var responseBody models.ResponseStatus
+
+	err := json.NewDecoder(request.Body).Decode(&requestBody)
+	if err != nil {
+		json.NewEncoder(writer).Encode("Invalid json")
+		writer.WriteHeader(http.StatusBadRequest)
+		return
+	}
+	claims := middlewares.JWT(writer, request, params)
+	err = server.maintenanceService.AddTerminal(requestBody, claims)
+	if err != nil {
+		writer.WriteHeader(http.StatusBadRequest)
+		return
+	}
+	responseBody.Ok = true
+	responseBody.Message = "Новый терминал успешно добавлен"
+	err = json.NewEncoder(writer).Encode(responseBody)
+	if err != nil {
+		writer.WriteHeader(http.StatusNotFound)
+		return
+	}
+	return
+}
+

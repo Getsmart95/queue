@@ -9,27 +9,25 @@ type CredentialStatus struct {
 }
 
 type ResponseUser struct {
-	ID        int       `json:"id"`
 	Name      string    `json:"name"`
 	Surname   string    `json:"surname"`
 	Login     string    `json:"login"`
 	Email     string    `json:"email"`
 	Phone     string    `json:"phone"`
+	Role 	  string 	`json:"role"`
 	Status    bool      `json:"status"`
 	CreatedAt time.Time `json:"created_at"`
 }
 type ResponseToken struct {
 		Ok        bool   `json:"ok"`
 		Token     string `json:"token"`
-		ExpiredIn int    `json:"expired_In"`
-		Status    rune   `json:"status"`
 		User      ResponseUser
 }
 
 type ResponseStatus struct {
 		Ok      bool   `json:"ok"`
-		Status  rune   `json:"status"`
 		Message string `json:"message"`
+		Status rune `json:"status"`
 }
 
 type JWTUserRole struct {

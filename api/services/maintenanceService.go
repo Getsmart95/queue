@@ -7,6 +7,7 @@ import (
 	"log"
 	"queue/databases/postgres"
 	"queue/models"
+	"queue/tokens"
 )
 
 type MaintenanceService struct {
@@ -177,4 +178,19 @@ func (receiver *MaintenanceService) GetTimes()(Times []models.Time, err error){
 		Times = append(Times, Time)
 	}
 	return Times, nil
+}
+
+func (receiver *MaintenanceService) AddTerminal(Terminal models.Terminal, Claims *tokens.Claims) (err error) {
+	conn, err := receiver.pool.Acquire(context.Background())
+	if err != nil {
+		log.Printf("can't get connection %e", err)
+		return
+	}
+	defer conn.Release()
+
+	_, err = conn.Exec(context.Background(), postgres.AddTerminal, Terminal.TerminalNumber, Terminal.CityID, Terminal.BranchID, Claims.UserID)
+	if err != nil {
+		return
+	}
+	return nil
 }

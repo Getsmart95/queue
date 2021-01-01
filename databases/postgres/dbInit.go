@@ -24,6 +24,7 @@ func (receiver *DBPostgres) DbInit() (err error) {
 		CreateTimesTable,
 		CreateRolesTable,
 		CreateUserRoleTable,
+		CreateTerminalsTable,
 		CreateQueuesTable,
 		RolesSeeder,
 		UserSeeder,

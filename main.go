@@ -35,6 +35,7 @@ func main() {
 	dbInit := postgres.NewDBInit(pool)
 
 	server := app.NewMainServer(pool, router,  dbInit, userService, maintenanceService, queueService)
+
 	server.Start()
 	fmt.Println(address)
 	panic(http.ListenAndServe(address, server))
