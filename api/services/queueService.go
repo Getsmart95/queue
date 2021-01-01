@@ -36,7 +36,6 @@ func (receiver *QueueService) AddQueue(Queue models.RequestTerminal, LastQueueCo
 	Status := "Pending"
 
 	QueueCode := LastQueueCode + 1
-	fmt.Printf("%010d", QueueCode)
 	_, err = conn.Exec(context.Background(), postgres.AddQueue,
 		strconv.Itoa(QueueCode),
 		Terminal.UserID,

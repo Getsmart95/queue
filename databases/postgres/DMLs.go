@@ -19,7 +19,7 @@ const AddTime  =  `insert into times(name) values($1)`
 const GetTimes  =  `select * from times`
 const AddQueue  =  `insert into queues(queue_code, user_id, terminal_id, city_id, branch_id, purpose_id, status, date)
 					values($1, $2, $3, $4, $5, $6, $7, $8)`
-const GetQueuesByDate  =  `select * from queues where date = ($1) and status = 'Pending' or status = 'Approved' order by queue_code limit 7`
+const GetQueuesByDate  =  `select * from queues where date = ($1) and status = 'Pending' or status = 'Approved' order by queue_code limit 6`
 const GetQueuesByTime  =  `select * from queues where time_id = ($1)`
 const GetQueuesByStatus  =  `select * from queues where status = ($1)`
 const GetQueuesByUser  =  `select * from queues where user_id = ($1)`
