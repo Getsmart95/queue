@@ -34,7 +34,7 @@ func (server *MainServer) InitRoutes() {
 	server.router.GET("/api/queues/getByStatus/:status", middlewares.JWTAuth()(server.GetQueuesByStatusHandler))
 	server.router.GET("/api/queues/getByUser/:user_id", middlewares.JWTAuth()(server.GetQueuesByUserHandler))
 	server.router.PUT("/api/queues/updateQueue", middlewares.JWTAuth()(server.UpdateQueueHandler))
-	server.router.POST("/api/queues/changeStatus/:queue_id", middlewares.JWTAuth()(server.QueueChangeStatusHandler))
+	server.router.PUT("/api/queues/changeStatus/:queue_id", middlewares.JWTAuth()(server.QueueChangeStatusHandler))
 	// Notification
 	server.router.POST("/api/sms/send", server.NotificationHandler)
 	// Terminal

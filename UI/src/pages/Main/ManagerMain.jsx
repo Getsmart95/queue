@@ -42,7 +42,7 @@ const Tablo = (props) => {
             status: "Approved"
         }
         axios
-            .post(`queues/changeStatus/${count.id}`, _data)
+            .put(`queues/changeStatus/${count.id}`, _data)
                 .then(res => {
                     window.location.reload(false)
                 })
@@ -59,7 +59,7 @@ const Tablo = (props) => {
         }
         
         axios
-            .post(`queues/changeStatus/${count.id}`, _data)
+            .put(`queues/changeStatus/${count.id}`, _data)
                 .then(res => {
                     window.location.reload(false)
                 })
