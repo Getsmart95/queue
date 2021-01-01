@@ -62,14 +62,10 @@ const Login = (props) => {
                 {/* <label >{alert.message}</label> */}
                     <div className="custom-control custom-checkbox">
                         <input type="checkbox" className="custom-control-input" id="customCheck1" />
-                        <label className="custom-control-label" htmlFor="customCheck1">Запомнить</label>
                     </div>
                 </div>
 
                 <button type="submit" className="btn btn-primary btn-block">Submit</button>
-                <p className="forgot-password text-right">
-                    Забыли <a href="#">пароль?</a>
-                </p>
             </form>
             </div>
             </div>

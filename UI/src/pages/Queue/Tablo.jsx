@@ -32,7 +32,7 @@ const Tablo = (props) => {
     return (
         <div className="auth-wrapper">
             <nav className="navbar navbar-light bg-light justify-content-between">
-                    <a className="navbar-brand">Navbar</a>
+                    <a className="navbar-brand">Queue</a>
             </nav>
             <div className="auth-inner">
             
@@ -42,17 +42,28 @@ const Tablo = (props) => {
                     <th>#</th>
                     <th>Номер</th>
                     <th>Статус</th>
+                    <th>Окно №</th>
                     </tr>
                 </thead>
-                {queues && queues.map(({queue_code, status},index) =>
-                    <tbody>
+                <tbody>
+                {queues && queues.map(({queue_code, status,purpose_id},index) =>
+                    (status === "Approved" ? ( 
+                    <tr>
+                    <td>{index+1}</td>
+                    <td><h3>{padLeadZeros(queue_code,3)}</h3></td>
+                    <td><h3>{status}</h3></td>
+                    <td><h3>{purpose_id.Int64}</h3></td>
+                    </tr>
+                
+                    ):(
                     <tr>
                     <td>{index+1}</td>
                     <td><h3>{padLeadZeros(queue_code,3)}</h3></td>
                     <td><h3>{status}</h3></td>
                     </tr>
-                </tbody>
+                    ))
                 )}
+                </tbody>
             </Table>
             </div>
         </div>

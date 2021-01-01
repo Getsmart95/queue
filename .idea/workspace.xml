@@ -2,35 +2,7 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="c5b0469c-dab2-4cd0-82a6-fe8259361770" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/api/cors/cors.go" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/api/middlewares/cors.go" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/api/middlewares/jwtAuth.go" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/models/terminal.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/UI/package-lock.json" beforeDir="false" afterPath="$PROJECT_DIR$/UI/package-lock.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/UI/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/UI/package.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/UI/src/App.js" beforeDir="false" afterPath="$PROJECT_DIR$/UI/src/App.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/UI/src/index.css" beforeDir="false" afterPath="$PROJECT_DIR$/UI/src/index.css" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/api/middlewares/guardRole.go" beforeDir="false" afterPath="$PROJECT_DIR$/api/middlewares/guardRole.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/api/middlewares/jwt.go" beforeDir="false" afterPath="$PROJECT_DIR$/api/middlewares/jwt.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/api/services/maintenanceService.go" beforeDir="false" afterPath="$PROJECT_DIR$/api/services/maintenanceService.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/api/services/queueService.go" beforeDir="false" afterPath="$PROJECT_DIR$/api/services/queueService.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/api/services/userService.go" beforeDir="false" afterPath="$PROJECT_DIR$/api/services/userService.go" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/app/app.go" beforeDir="false" afterPath="$PROJECT_DIR$/app/app.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/handlers.go" beforeDir="false" afterPath="$PROJECT_DIR$/app/handlers.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/routers.go" beforeDir="false" afterPath="$PROJECT_DIR$/app/routers.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/databases/postgres/DDLs.go" beforeDir="false" afterPath="$PROJECT_DIR$/databases/postgres/DDLs.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/databases/postgres/DMLs.go" beforeDir="false" afterPath="$PROJECT_DIR$/databases/postgres/DMLs.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/databases/postgres/dbInit.go" beforeDir="false" afterPath="$PROJECT_DIR$/databases/postgres/dbInit.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/databases/postgres/seeders.go" beforeDir="false" afterPath="$PROJECT_DIR$/databases/postgres/seeders.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/main.go" beforeDir="false" afterPath="$PROJECT_DIR$/main.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/models/queue.go" beforeDir="false" afterPath="$PROJECT_DIR$/models/queue.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/models/request.go" beforeDir="false" afterPath="$PROJECT_DIR$/models/request.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/models/response.go" beforeDir="false" afterPath="$PROJECT_DIR$/models/response.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/models/role.go" beforeDir="false" afterPath="$PROJECT_DIR$/models/role.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/models/user.go" beforeDir="false" afterPath="$PROJECT_DIR$/models/user.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/models/userRole.go" beforeDir="false" afterPath="$PROJECT_DIR$/models/userRole.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/tokens/tokens.go" beforeDir="false" afterPath="$PROJECT_DIR$/tokens/tokens.go" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />

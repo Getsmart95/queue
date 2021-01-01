@@ -72,7 +72,7 @@ const Tablo = (props) => {
         return (
             <div className="auth-wrapper">
                  <nav className="navbar navbar-light bg-light justify-content-between">
-                            <a className="navbar-brand">Navbar</a>
+                            <a className="navbar-brand">Queue</a>
                             
                  </nav>
             <div className="auth-inner">
