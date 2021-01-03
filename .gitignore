@@ -12,7 +12,5 @@
 *.idea
 *.exe
 
-.idea/*
-.idea/
 npm-debug.log*
 
