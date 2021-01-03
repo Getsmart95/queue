@@ -2,12 +2,12 @@ package services
 
 import "C"
 import (
-	"context"
 	"github.com/jackc/pgx/pgxpool"
-	"log"
 	"queue/databases/postgres"
 	"queue/models"
 	"queue/tokens"
+	"context"
+	"log"
 )
 
 type MaintenanceService struct {

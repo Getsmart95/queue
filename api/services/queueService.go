@@ -1,14 +1,14 @@
 package services
 
 import (
-	"context"
 	"fmt"
 	"github.com/jackc/pgx/pgxpool"
-	"log"
 	"queue/databases/postgres"
 	"queue/models"
 	"queue/tokens"
 	"strconv"
+	"context"
+	"log"
 )
 
 type QueueService struct {
@@ -42,6 +42,33 @@ func (receiver *QueueService) AddQueue(Queue models.RequestTerminal, LastQueueCo
 		Terminal.TerminalNumber,
 		Terminal.CityID,
 		Terminal.BranchID,
+		Queue.PurposeID,
+		Status,
+		Queue.Date)
+
+	if err != nil {
+		return
+	}
+	return nil
+}
+
+func (receiver *QueueService) AddQueueOnline(Queue models.RequestQueue, LastQueueCode int, Claims *tokens.Claims)(err error){
+	conn, err := receiver.pool.Acquire(context.Background())
+	if err != nil {
+		log.Printf("can't get connection %e", err)
+		return
+	}
+
+	defer conn.Release()
+	Status := "Pending"
+
+	QueueCode := LastQueueCode + 1
+	_, err = conn.Exec(context.Background(), postgres.AddQueue,
+		strconv.Itoa(QueueCode),
+		Claims.UserID,
+		nil,
+		Queue.CityID,
+		Queue.BranchID,
 		Queue.PurposeID,
 		Status,
 		Queue.Date)
@@ -100,12 +127,10 @@ func (receiver *QueueService) GetLastQueueByDate(Date string)(queue int, err err
 
 	err = conn.QueryRow(context.Background(), postgres.GetLastQueueByDate, Date).Scan(
 		&queue)
-	fmt.Println(err)
 
 	if err != nil {
 		return
 	}
-fmt.Println(queue)
 
 	return queue, nil
 }
@@ -148,7 +173,7 @@ func (receiver *QueueService) GetQueuesByTime(TimeID int)(queues []models.Queue,
 	return queues, nil
 }
 
-func (receiver *QueueService) GetQueuesByStatus(Status string)(queues []models.Queue, err error) {
+func (receiver *QueueService) GetQueuesByStatus(Status string, Date string)(queues []models.Queue, err error) {
 	conn, err := receiver.pool.Acquire(context.Background())
 	if err != nil {
 		log.Printf("can't get connection %e", err)
@@ -156,8 +181,10 @@ func (receiver *QueueService) GetQueuesByStatus(Status string)(queues []models.Q
 	}
 	defer conn.Release()
 
-	rows, err := conn.Query(context.Background(), postgres.GetQueuesByStatus, Status)
+	rows, err := conn.Query(context.Background(), postgres.GetQueuesByStatus, Status, Date)
 	if err != nil {
+		fmt.Println(err)
+
 		return
 	}
 	defer rows.Close()
@@ -179,6 +206,8 @@ func (receiver *QueueService) GetQueuesByStatus(Status string)(queues []models.Q
 			&Queue.FinishAt,
 			&Queue.CreatedAt)
 		if errQueue != nil {
+			fmt.Println(err)
+
 			return
 		}
 		queues = append(queues, Queue)

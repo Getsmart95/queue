@@ -9,11 +9,12 @@ const Tablo = (props) => {
     useEffect(() => {
         let TodayDate = moment().format("YYYY-MM-DD");
         axios
-        .get(`queues/getByDate/${TodayDate}`)
-        .then(res => {
-            setQueues(res);
-            setCount(res[0]) 
+            .get(`queues/getByDate/${TodayDate}`)
+            .then(res => {
+                setQueues(res);
+                setCount(res[0]) 
         });
+
         const interval = setInterval(()=>{
             axios
             .get(`queues/getByDate/${TodayDate}`)

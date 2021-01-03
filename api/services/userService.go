@@ -1,13 +1,13 @@
 package services
 
 import (
-	"context"
-	"fmt"
 	"github.com/jackc/pgx/pgxpool"
 	"golang.org/x/crypto/bcrypt"
-	"log"
 	"queue/databases/postgres"
 	"queue/models"
+	"context"
+	"fmt"
+	"log"
 )
 
 type UserService struct {
@@ -31,12 +31,11 @@ func (receiver *UserService) CheckUser(Login string) (result bool, err error) {
 	if err != nil {
 		return false, err
 	}
-	if exists == "" {
-		return false, nil
-	} else {
+
+	if exists != "" {
 		return true, nil
 	}
-
+	return
 }
 func (receiver *UserService) Registration(User models.User) (err error) {
 	conn, err := receiver.pool.Acquire(context.Background())
@@ -77,7 +76,6 @@ func (receiver *UserService) Authentication(User models.User) (login bool, passw
 	if err != nil {
 		return false, false, userID, responseUser, err
 	}
-	fmt.Println(user)
 	responseUser = GetResponseUser(user)
 
 	errHash := CompareHashWithPassword(user.Password, User.Password)
@@ -173,7 +171,7 @@ func (receiver *UserService) AddUser(User models.User) (err error) {
 	return nil
 }
 
-func (receiver *UserService) AddUserRole(userID int, roleID int) (err error) {
+func (receiver *UserService) AddUserRole(roleID int, Login string) (err error) {
 	conn, err := receiver.pool.Acquire(context.Background())
 	if err != nil {
 		log.Printf("can't get connection %e", err)
@@ -182,7 +180,7 @@ func (receiver *UserService) AddUserRole(userID int, roleID int) (err error) {
 
 	defer conn.Release()
 
-	_, err = conn.Exec(context.Background(), postgres.AddUserRole, roleID, userID)
+	_, err = conn.Exec(context.Background(), postgres.AddUserRole, roleID, Login)
 	return nil
 }
 
@@ -202,12 +200,13 @@ func (receiver *UserService) GetUserByLogin(userLogin string) (userID int, respo
 		&user.Password,
 		&user.Email,
 		&user.Phone,
+		&user.Role,
 		&user.Status,
 		&user.CreatedAt)
+
 	if err != nil {
 		return
 	}
-
 	responseUser = GetResponseUser(user)
 	return user.ID, responseUser, nil
 }

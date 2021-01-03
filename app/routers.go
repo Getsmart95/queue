@@ -28,7 +28,8 @@ func (server *MainServer) InitRoutes() {
 	server.router.POST("/api/purposes/addPurpose", middlewares.GuardRole(server.userService)(server.AddPurposeHandler))
 	server.router.GET("/api/purposes", middlewares.JWTAuth()(server.GetPurposes))
 	// Queue
-	server.router.POST("/api/queue/addQueue", middlewares.GuardRole(server.userService)(server.AddQueueHandler)) // Terminal
+	server.router.POST("/api/queue/addQueue", middlewares.JWTAuth()(server.AddQueueHandler)) // Terminal & Humo online
+	server.router.POST("/api/queue/addQueueOnline", middlewares.JWTAuth()(server.AddQueueOnlineHandler)) // Terminal & Humo online
 	server.router.GET("/api/queues/getByDate/:date", middlewares.JWTAuth()(server.GetQueuesByDateHandler))
 	server.router.GET("/api/queues/getByTime/:time_id", middlewares.JWTAuth()(server.GetQueuesByTimeHandler))
 	server.router.GET("/api/queues/getByStatus/:status", middlewares.JWTAuth()(server.GetQueuesByStatusHandler))
@@ -38,5 +39,5 @@ func (server *MainServer) InitRoutes() {
 	// Notification
 	server.router.POST("/api/sms/send", server.NotificationHandler)
 	// Terminal
-	server.router.POST("/api/terminal/addTerminal", middlewares.CORS(middlewares.GuardRole(server.userService)(server.AddTerminalHandler)))
+	server.router.POST("/api/terminal/addTerminal", middlewares.GuardRole(server.userService)(server.AddTerminalHandler))
 }

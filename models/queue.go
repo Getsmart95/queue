@@ -7,17 +7,17 @@ import (
 )
 
 type Queue struct {
-	ID         int              `json:"id"`
-	QueueCode  int              `json:"queue_code"`
-	TerminalID sql.NullInt64              `json:"terminal_id"`
-	UserID     sql.NullInt64              `json:"user_id"`
-	CityID     sql.NullInt64              `json:"city_id"`
-	BranchID   sql.NullInt64              `json:"branch_id"`
-	PurposeID  sql.NullInt64              `json:"purpose_id"`
-	TimeID     sql.NullInt64              `json:"time_id,omitempty"`
-	Status     string           `json:"status"`
-	Date       time.Time		    `json:"date"`
-	StartAt    pgtype.Timestamp `json:"start_at"`
-	FinishAt   pgtype.Timestamp `json:"finish_at"`
-	CreatedAt  pgtype.Timestamp `json:"created_at"`
+	ID         int              `json:"id,omitempty"`
+	QueueCode  int              `json:"queue_code,omitempty"`
+	TerminalID sql.NullInt64    `json:"terminal_id,omitempty"`
+	UserID     sql.NullInt64    `json:"user_id,omitempty"`
+	CityID     sql.NullInt64    `json:"city_id,omitempty"`
+	BranchID   sql.NullInt64    `json:"branch_id,omitempty"`
+	PurposeID  sql.NullInt64    `json:"purpose_id,omitempty"`
+	TimeID     sql.NullInt64    `json:"time_id,omitempty"`
+	Status     string           `json:"status,omitempty"`
+	Date       time.Time        `json:"date,omitempty"`
+	StartAt    pgtype.Timestamp `json:"start_at,omitempty"`
+	FinishAt   pgtype.Timestamp `json:"finish_at,omitempty"`
+	CreatedAt  pgtype.Timestamp `json:"created_at,omitempty"`
 }

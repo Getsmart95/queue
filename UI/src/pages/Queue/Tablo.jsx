@@ -11,14 +11,15 @@ const Tablo = (props) => {
             .get(`queues/getByDate/${TodayDate}`)
             .then(res => {
                 setQueues(res);
+        });
+
+        const interval = setInterval(()=>{
+            axios
+            .get(`queues/getByDate/${TodayDate}`)
+            .then(res => {
+                setQueues(res);
             });
-            const interval = setInterval(()=>{
-                axios
-                .get(`queues/getByDate/${TodayDate}`)
-                .then(res => {
-                    setQueues(res);
-                });
-            },10000)
+        },10000)
         //moment().format("DD-MM-YYYY hh:mm:ss"));
             return()=>clearInterval(interval)
     },[]);

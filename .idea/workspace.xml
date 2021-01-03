@@ -3,9 +3,23 @@
   <component name="ChangeListManager">
     <list default="true" id="c5b0469c-dab2-4cd0-82a6-fe8259361770" name="Default Changelist" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/UI/.eslintcache" beforeDir="false" afterPath="$PROJECT_DIR$/UI/.eslintcache" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/UI/debug.log" beforeDir="false" afterPath="$PROJECT_DIR$/UI/debug.log" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/UI/src/App copy.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/UI/src/pages/Main/ManagerMain.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/UI/src/pages/Main/ManagerMain.jsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/UI/src/pages/Queue/Tablo.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/UI/src/pages/Queue/Tablo.jsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/api/services/maintenanceService.go" beforeDir="false" afterPath="$PROJECT_DIR$/api/services/maintenanceService.go" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/api/services/queueService.go" beforeDir="false" afterPath="$PROJECT_DIR$/api/services/queueService.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/app.go" beforeDir="false" afterPath="$PROJECT_DIR$/app/app.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/api/services/userService.go" beforeDir="false" afterPath="$PROJECT_DIR$/api/services/userService.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/handlers.go" beforeDir="false" afterPath="$PROJECT_DIR$/app/handlers.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/routers.go" beforeDir="false" afterPath="$PROJECT_DIR$/app/routers.go" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/databases/postgres/DMLs.go" beforeDir="false" afterPath="$PROJECT_DIR$/databases/postgres/DMLs.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/models/queue.go" beforeDir="false" afterPath="$PROJECT_DIR$/models/queue.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/models/request.go" beforeDir="false" afterPath="$PROJECT_DIR$/models/request.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/models/response.go" beforeDir="false" afterPath="$PROJECT_DIR$/models/response.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/models/role.go" beforeDir="false" afterPath="$PROJECT_DIR$/models/role.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/models/terminal.go" beforeDir="false" afterPath="$PROJECT_DIR$/models/terminal.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/models/user.go" beforeDir="false" afterPath="$PROJECT_DIR$/models/user.go" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -133,12 +147,7 @@
               <path>
                 <item name="services root" type="e789fda9:ObjectUtils$Sentinel" />
                 <item name="root:postgres@localhost" type="7427dc5b:ServiceModel$ServiceGroupNode" />
-                <item name="com.intellij.database.console.session.MessageBusSession@1cafe408" type="9fbbdea:ServiceModel$ServiceNode" />
-              </path>
-              <path>
-                <item name="services root" type="e789fda9:ObjectUtils$Sentinel" />
-                <item name="root:postgres@localhost" type="7427dc5b:ServiceModel$ServiceGroupNode" />
-                <item name="com.intellij.database.console.session.MessageBusSession@3fecdf22" type="9fbbdea:ServiceModel$ServiceNode" />
+                <item name="com.intellij.database.console.session.MessageBusSession@7bdd0162" type="9fbbdea:ServiceModel$ServiceNode" />
               </path>
             </expand>
             <select />
@@ -167,26 +176,26 @@
       <screen x="0" y="0" width="1536" height="834" />
     </state>
     <state x="496" y="54" key="#go_build_role.go/0.0.1536.834@0.0.1536.834" timestamp="1608676958498" />
-    <state x="549" y="173" key="FileChooserDialogImpl" timestamp="1609275823532">
+    <state x="549" y="173" key="FileChooserDialogImpl" timestamp="1609704178134">
       <screen x="0" y="0" width="1536" height="834" />
     </state>
-    <state x="549" y="173" key="FileChooserDialogImpl/0.0.1536.834@0.0.1536.834" timestamp="1609275823532" />
-    <state width="1024" height="391" key="GridCell.Tab.0.bottom" timestamp="1609518547578">
+    <state x="549" y="173" key="FileChooserDialogImpl/0.0.1536.834@0.0.1536.834" timestamp="1609704178134" />
+    <state width="1024" height="245" key="GridCell.Tab.0.bottom" timestamp="1609704719658">
       <screen x="0" y="0" width="1536" height="834" />
     </state>
-    <state width="1024" height="391" key="GridCell.Tab.0.bottom/0.0.1536.834@0.0.1536.834" timestamp="1609518547578" />
-    <state width="1024" height="391" key="GridCell.Tab.0.center" timestamp="1609518547577">
+    <state width="1024" height="245" key="GridCell.Tab.0.bottom/0.0.1536.834@0.0.1536.834" timestamp="1609704719658" />
+    <state width="1024" height="245" key="GridCell.Tab.0.center" timestamp="1609704719657">
       <screen x="0" y="0" width="1536" height="834" />
     </state>
-    <state width="1024" height="391" key="GridCell.Tab.0.center/0.0.1536.834@0.0.1536.834" timestamp="1609518547577" />
-    <state width="1024" height="391" key="GridCell.Tab.0.left" timestamp="1609518547577">
+    <state width="1024" height="245" key="GridCell.Tab.0.center/0.0.1536.834@0.0.1536.834" timestamp="1609704719657" />
+    <state width="1024" height="245" key="GridCell.Tab.0.left" timestamp="1609704719657">
       <screen x="0" y="0" width="1536" height="834" />
     </state>
-    <state width="1024" height="391" key="GridCell.Tab.0.left/0.0.1536.834@0.0.1536.834" timestamp="1609518547577" />
-    <state width="1024" height="391" key="GridCell.Tab.0.right" timestamp="1609518547577">
+    <state width="1024" height="245" key="GridCell.Tab.0.left/0.0.1536.834@0.0.1536.834" timestamp="1609704719657" />
+    <state width="1024" height="245" key="GridCell.Tab.0.right" timestamp="1609704719658">
       <screen x="0" y="0" width="1536" height="834" />
     </state>
-    <state width="1024" height="391" key="GridCell.Tab.0.right/0.0.1536.834@0.0.1536.834" timestamp="1609518547577" />
+    <state width="1024" height="245" key="GridCell.Tab.0.right/0.0.1536.834@0.0.1536.834" timestamp="1609704719658" />
     <state x="656" y="188" width="322" height="458" key="com.intellij.database.actions.DdlActions$DeleteProvider2$1" timestamp="1609493706085">
       <screen x="0" y="0" width="1536" height="834" />
     </state>
@@ -203,6 +212,10 @@
       <screen x="0" y="0" width="1536" height="834" />
     </state>
     <state x="562" y="107" key="com.intellij.openapi.editor.actions.MultiplePasteAction$ClipboardContentChooser/0.0.1536.834@0.0.1536.834" timestamp="1608585520848" />
+    <state x="330" y="154" key="com.intellij.xdebugger.impl.breakpoints.ui.BreakpointsDialogFactory$2" timestamp="1609682968187">
+      <screen x="0" y="0" width="1536" height="834" />
+    </state>
+    <state x="330" y="154" key="com.intellij.xdebugger.impl.breakpoints.ui.BreakpointsDialogFactory$2/0.0.1536.834@0.0.1536.834" timestamp="1609682968187" />
     <state x="463" y="149" width="609" height="536" key="find.popup" timestamp="1608585515429">
       <screen x="0" y="0" width="1536" height="834" />
     </state>
