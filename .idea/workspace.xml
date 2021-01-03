@@ -1,26 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="c5b0469c-dab2-4cd0-82a6-fe8259361770" name="Default Changelist" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/UI/.eslintcache" beforeDir="false" afterPath="$PROJECT_DIR$/UI/.eslintcache" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/UI/debug.log" beforeDir="false" afterPath="$PROJECT_DIR$/UI/debug.log" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/UI/src/App copy.js" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/UI/src/pages/Main/ManagerMain.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/UI/src/pages/Main/ManagerMain.jsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/UI/src/pages/Queue/Tablo.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/UI/src/pages/Queue/Tablo.jsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/api/services/maintenanceService.go" beforeDir="false" afterPath="$PROJECT_DIR$/api/services/maintenanceService.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/api/services/queueService.go" beforeDir="false" afterPath="$PROJECT_DIR$/api/services/queueService.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/api/services/userService.go" beforeDir="false" afterPath="$PROJECT_DIR$/api/services/userService.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/handlers.go" beforeDir="false" afterPath="$PROJECT_DIR$/app/handlers.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/routers.go" beforeDir="false" afterPath="$PROJECT_DIR$/app/routers.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/databases/postgres/DMLs.go" beforeDir="false" afterPath="$PROJECT_DIR$/databases/postgres/DMLs.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/models/queue.go" beforeDir="false" afterPath="$PROJECT_DIR$/models/queue.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/models/request.go" beforeDir="false" afterPath="$PROJECT_DIR$/models/request.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/models/response.go" beforeDir="false" afterPath="$PROJECT_DIR$/models/response.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/models/role.go" beforeDir="false" afterPath="$PROJECT_DIR$/models/role.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/models/terminal.go" beforeDir="false" afterPath="$PROJECT_DIR$/models/terminal.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/models/user.go" beforeDir="false" afterPath="$PROJECT_DIR$/models/user.go" afterDir="false" />
-    </list>
+    <list default="true" id="c5b0469c-dab2-4cd0-82a6-fe8259361770" name="Default Changelist" comment="" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
