@@ -2,7 +2,8 @@ package postgres
 
 const SetTimeZone  =  `SET timezone='Asia/Dushanbe';`
 const CheckUser  =  `select login from users where login = ($1)`
-const AddUser  =  `insert into users(name, surname, login, password, email, phone, status) values($1, $2, $3, $4, $5, $6, $7)`
+const Registration  =  `insert into users(name, surname, login, password, email, phone, status) values($1, $2, $3, $4, $5, $6, $7)`
+const AddManager  =  `insert into users(name, surname, login, password, email, phone, status) values($1, $2, $3, $4, $5, $6, $7)`
 const AddUserRole  =  `insert into userRole(role_id, user_id) select ($1), id from users where login = ($2)`
 const GetUserByLogin  =  `select u.id, u.name, u.surname, u.login, u.password, u.phone, u.email, r.name, u.status, u.created_at 
 						  from userrole ur, users u, roles r 

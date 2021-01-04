@@ -1,7 +1,6 @@
 package tokens
 
 import (
-	"fmt"
 	"github.com/dgrijalva/jwt-go"
 	"time"
 )
@@ -27,7 +26,6 @@ func SetToken(UserID int, Login string) (Token string) {
 	}
 	token := jwt.NewWithClaims(jwt.SigningMethodHS256, claims)
 	Token, _ = token.SignedString(mySigningKey)
-	fmt.Printf("I am a token = %v\n", Token)
 	return Token
 }
 

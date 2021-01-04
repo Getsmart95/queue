@@ -47,21 +47,31 @@ func (server *MainServer) CheckUserHandler(writer http.ResponseWriter, request *
 func (server *MainServer) RegisterHandler(writer http.ResponseWriter, request *http.Request, _ httprouter.Params) {
 	var requestBody models.User
 	var responseBody models.ResponseToken
+	var responseStatus models.ResponseStatus
 	var Status models.CredentialStatus
 
 	err := json.NewDecoder(request.Body).Decode(&requestBody)
 	if err != nil {
 		writer.WriteHeader(http.StatusBadRequest)
+		json.NewEncoder(writer).Encode("Invalid json")
 		return
 	}
 
+	if len(requestBody.Password) < 8 {
+		responseStatus.Ok = false
+		responseStatus.Message = "Password is too short. Minimum 8 symbols"
+		writer.WriteHeader(http.StatusBadRequest)
+		json.NewEncoder(writer).Encode(responseStatus)
+		return
+	}
 	err = server.userService.Registration(requestBody)
+
 	if err != nil {
 		writer.WriteHeader(http.StatusBadRequest)
 		json.NewEncoder(writer).Encode(Status)
 		return
 	}
-
+	//	Add role "user"
 	roleID := 3
 	err = server.userService.AddUserRole(roleID, requestBody.Login)
 	if err != nil {
@@ -69,10 +79,6 @@ func (server *MainServer) RegisterHandler(writer http.ResponseWriter, request *h
 		return
 	}
 	userID, responseUser, err := server.userService.GetUserByLogin(requestBody.Login)
-	//	Add role "user"
-	fmt.Println(requestBody.Login)
-	fmt.Println(userID)
-	fmt.Println(responseUser)
 
 	token := tokens.SetToken(userID, responseUser.Login)
 
@@ -160,9 +166,10 @@ func (server *MainServer) AddManagerHandler(writer http.ResponseWriter, request 
 		responseBody.Message = "Password is too short. Minimum 8 symbols"
 		writer.WriteHeader(http.StatusBadRequest)
 		json.NewEncoder(writer).Encode(responseBody)
+		return
 	}
 
-	err = server.userService.AddUser(requestBody)
+	err = server.userService.AddManager(requestBody)
 	if err != nil {
 		writer.WriteHeader(http.StatusBadRequest)
 		return

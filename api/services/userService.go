@@ -46,7 +46,7 @@ func (receiver *UserService) Registration(User models.User) (err error) {
 
 	defer conn.Release()
 	password := MakeHash(User.Password)
-	_, err = conn.Exec(context.Background(), postgres.AddUser, User.Name, User.Surname, User.Login, password, User.Email, User.Phone, User.Status)
+	_, err = conn.Exec(context.Background(), postgres.Registration, User.Name, User.Surname, User.Login, password, User.Email, User.Phone, User.Status)
 	if err != nil {
 		return
 	}
@@ -155,7 +155,7 @@ func (receiver *UserService) GetRoleByUser(Login string) (role models.JWTUserRol
 }
 
 
-func (receiver *UserService) AddUser(User models.User) (err error) {
+func (receiver *UserService) AddManager(User models.User) (err error) {
 	conn, err := receiver.pool.Acquire(context.Background())
 	if err != nil {
 		log.Printf("can't get connection %e", err)
@@ -164,7 +164,7 @@ func (receiver *UserService) AddUser(User models.User) (err error) {
 
 	defer conn.Release()
 	password := MakeHash(User.Password)
-	_, err = conn.Exec(context.Background(), postgres.AddUser, User.Name, User.Surname, User.Login, password, User.Email, User.Phone, User.Status)
+	_, err = conn.Exec(context.Background(), postgres.AddManager, User.Name, User.Surname, User.Login, password, User.Email, User.Phone, User.Status)
 	if err != nil {
 		return
 	}
